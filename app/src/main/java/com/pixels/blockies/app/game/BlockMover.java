@@ -1,15 +1,13 @@
 package com.pixels.blockies.app.game;
 
-import android.util.Log;
-
-import com.pixels.blockies.app.draws.Block;
+import com.pixels.blockies.app.environment.StaticGameEnvironment;
 
 /**
  * Created by keinmark on 08.03.14.
  */
 public class BlockMover implements Runnable {
+    Grid grid = Grid.getInstance();
     Block block = null;
-    private int groundLimit = -1;
 
     @Override
     public void run() {
@@ -20,31 +18,32 @@ public class BlockMover implements Runnable {
     }
 
     private void doHandle() {
-        if (isBlockSet() && isGroundSet()) {
+        if (isBlockInGame()) {
             moveBlockDown();
         }
     }
 
     private void moveBlockDown() {
-        int currentY = block.getY();
-        int newY = block.getHeight() + currentY;
-        if(!isGroundReached(newY)) {
-            block.setY(newY);
-        }else{
+        if (!isGroundReachedOnNext()) {
+            removeOldPosition();
+            int currentRow = block.getY();
+            block.setY(++currentRow);
+            addNewPosition();
+        } else {
             removeBlock();
         }
     }
 
-    private boolean isGroundReached(int newY) {
-        return !(newY < groundLimit);
+    private void addNewPosition() {
+        int x = block.getX();
+        int y = block.getY();
+        grid.add(x, y);
     }
 
-    private boolean isGroundSet() {
-        return groundLimit != -1;
-    }
-
-    private boolean isBlockSet() {
-        return block != null;
+    private void removeOldPosition() {
+        int x = block.getX();
+        int y = block.getY();
+        grid.remove(x, y);
     }
 
     private void delay() {
@@ -55,15 +54,20 @@ public class BlockMover implements Runnable {
         }
     }
 
-    public void setGroundLimit(int groundLimit) {
-        this.groundLimit = groundLimit;
+    public void putNewBlockInGame(Block block) {
+        this.block = block;
     }
 
-    public void setBlock(Block b) {
-        this.block = b;
+    public boolean isBlockInGame() {
+        return block != null;
     }
 
-    public void removeBlock() {
+    private boolean isGroundReachedOnNext() {
+        return (block.getY()+1) >= StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
+    }
+
+    private void removeBlock() {
         this.block = null;
     }
+
 }

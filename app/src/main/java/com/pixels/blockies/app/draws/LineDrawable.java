@@ -7,14 +7,14 @@ import android.graphics.Paint;
 /**
  * Created by keinmark on 08.03.14.
  */
-public class Line implements Drawable{
+public class LineDrawable implements Drawable{
     Paint paint = new Paint();
     private int x1 = -1;
     private int y1 = -1;
     private int x2 = -1;
     private int y2 = -1;
 
-    public Line(int x1, int y1, int x2, int y2){
+    public LineDrawable(int x1, int y1, int x2, int y2){
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
