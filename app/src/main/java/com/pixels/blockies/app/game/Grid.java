@@ -8,7 +8,7 @@ import com.pixels.blockies.app.environment.StaticGameEnvironment;
 public class Grid {
     private static  Grid grid = null;
 
-    private int[][] logicalGrid = new int[StaticGameEnvironment.VERTICAL_BLOCK_COUNT][StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT];
+    private int[][] logicalGrid = new int[StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT][StaticGameEnvironment.VERTICAL_BLOCK_COUNT];
 
     public static Grid getInstance(){
         if(grid == null){

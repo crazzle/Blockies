@@ -3,7 +3,6 @@ package com.pixels.blockies.app.draws;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.Grid;
 
@@ -27,7 +26,7 @@ public class GridDrawable implements Drawable {
      * Drawing related
      */
     Paint paint = new Paint();
-    BlockDrawable[][] blockDrawables = new BlockDrawable[StaticGameEnvironment.VERTICAL_BLOCK_COUNT][StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT];
+    BlockDrawable[][] blockDrawables = new BlockDrawable[StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT][StaticGameEnvironment.VERTICAL_BLOCK_COUNT];
     Grid logicalGrid = Grid.getInstance();
 
     private GridDrawable(){

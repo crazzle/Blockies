@@ -2,15 +2,18 @@ package com.pixels.blockies.app;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
-
 import com.pixels.blockies.app.draws.GridDrawable;
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
+import com.pixels.blockies.app.game.BlockMover;
 
 /**
  * Created by keinmark on 08.03.14.
  */
-public class DrawingView extends View {
+public class DrawingView extends View implements View.OnTouchListener {
 
     /**
      * Technical Variables
@@ -18,11 +21,13 @@ public class DrawingView extends View {
     int width = -1;
     int height = -1;
     boolean isInit = false;
+    GestureDetectorCompat detectorCompat;
 
     /**
      * The needed Grid
      */
     GridDrawable grid = GridDrawable.getInstance();
+    private BlockMover mover;
 
     /**
      * Constructor
@@ -37,11 +42,13 @@ public class DrawingView extends View {
      */
     public void init() {
         if (!isInit) {
-            int blockHeight = (height - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
-            int blockWidth = (width - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.VERTICAL_BLOCK_COUNT;
+            int blockHeight = (height - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.VERTICAL_BLOCK_COUNT;
+            int blockWidth = (width - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
             initializeGrid(blockHeight, blockWidth);
             isInit = true;
         }
+        detectorCompat = new GestureDetectorCompat(this.getContext(), new FlingDownGestureListener());
+        this.setOnTouchListener(this);
     }
 
     /**
@@ -80,4 +87,34 @@ public class DrawingView extends View {
         height = yNew;
     }
 
+    public void setBlockMover(BlockMover mover) {
+        this.mover = mover;
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        this.detectorCompat.onTouchEvent(motionEvent);
+        return true;
+    }
+
+    class FlingDownGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+                if (isInit && mover != null) {
+                    if((event2.getY() - event1.getY()) > 50){
+                        mover.moveToBottom();
+                    }else{
+                        int step = width/StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
+                        int newXGridCoordinate = (int) event2.getX()/step;
+                        if(newXGridCoordinate > 9){
+                            newXGridCoordinate = 9;
+                        }
+                        mover.moveHorizontalPosition(newXGridCoordinate);
+                    }
+                }
+                return true;
+        }
+    }
 }
