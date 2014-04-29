@@ -6,6 +6,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
 import com.pixels.blockies.app.draws.GridDrawable;
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.BlockMover;
@@ -21,7 +22,6 @@ public class DrawingView extends View implements View.OnTouchListener {
     int width = -1;
     int height = -1;
     boolean isInit = false;
-    GestureDetectorCompat detectorCompat;
 
     /**
      * The needed Grid
@@ -47,7 +47,6 @@ public class DrawingView extends View implements View.OnTouchListener {
             initializeGrid(blockHeight, blockWidth);
             isInit = true;
         }
-        detectorCompat = new GestureDetectorCompat(this.getContext(), new FlingDownGestureListener());
         this.setOnTouchListener(this);
     }
 
@@ -93,28 +92,14 @@ public class DrawingView extends View implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        this.detectorCompat.onTouchEvent(motionEvent);
-        return true;
-    }
-
-    class FlingDownGestureListener extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2,
-                               float velocityX, float velocityY) {
-                if (isInit && mover != null) {
-                    if((event2.getY() - event1.getY()) > 50){
-                        mover.moveToBottom();
-                    }else{
-                        int step = width/StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
-                        int newXGridCoordinate = (int) event2.getX()/step;
-                        if(newXGridCoordinate > 9){
-                            newXGridCoordinate = 9;
-                        }
-                        mover.moveHorizontalPosition(newXGridCoordinate);
-                    }
+        if (isInit && mover != null) {
+                int step = width/StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
+                int newXGridCoordinate = (int) motionEvent.getX()/step;
+                if(newXGridCoordinate > 9){
+                    newXGridCoordinate = 9;
                 }
-                return true;
+                mover.moveHorizontalPosition(newXGridCoordinate);
         }
+        return true;
     }
 }

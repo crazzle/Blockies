@@ -3,6 +3,7 @@ package com.pixels.blockies.app;
 
 import android.app.Activity;
 import android.os.Bundle;
+
 import com.pixels.blockies.app.game.BlockMover;
 
 

@@ -3,6 +3,7 @@ package com.pixels.blockies.app.draws;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.Grid;
 
