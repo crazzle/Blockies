@@ -87,12 +87,15 @@ public class BlockMover implements Runnable {
         this.block = null;
     }
 
-
     public void moveToBottom() {
         if(isBlockInGame()) {
             removeOldPosition();
-            block.setY(StaticGameEnvironment.VERTICAL_BLOCK_COUNT - 1);
+            while(!isGroundReachedOnNext() && !isNextOccupied()){
+                int y = block.getY();
+                block.setY(++y);
+            }
             addNewPosition();
+            removeBlock();
         }
     }
 }

@@ -22,6 +22,7 @@ public class DrawingView extends View implements View.OnTouchListener {
     int width = -1;
     int height = -1;
     boolean isInit = false;
+    GestureDetectorCompat mDetector = new GestureDetectorCompat(this.getContext(), new FlingDownListener());
 
     /**
      * The needed Grid
@@ -86,20 +87,42 @@ public class DrawingView extends View implements View.OnTouchListener {
         height = yNew;
     }
 
+    /**
+     * Recognize block movement by touch
+     * @param view
+     * @param motionEvent
+     * @return
+     */
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (isInit && mover != null) {
+            int step = width/StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
+            int newXGridCoordinate = (int) motionEvent.getX()/step;
+            if(newXGridCoordinate > 9){
+                newXGridCoordinate = 9;
+            }
+            mover.moveHorizontalPosition(newXGridCoordinate);
+        }
+        this.mDetector.onTouchEvent(motionEvent);
+        return true;
+    }
+
     public void setBlockMover(BlockMover mover) {
         this.mover = mover;
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (isInit && mover != null) {
-                int step = width/StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
-                int newXGridCoordinate = (int) motionEvent.getX()/step;
-                if(newXGridCoordinate > 9){
-                    newXGridCoordinate = 9;
-                }
-                mover.moveHorizontalPosition(newXGridCoordinate);
+    /**
+     * Listener to recognize fling down
+     */
+    class FlingDownListener extends GestureDetector.SimpleOnGestureListener {
+        private static final int SWIPE_MIN_DISTANCE = 100;
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE) {
+                mover.moveToBottom();
+            }
+            return false;
         }
-        return true;
     }
 }
