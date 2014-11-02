@@ -4,9 +4,13 @@ package com.pixels.blockies.app.game.figures;
  * Created by mark on 02.11.14.
  */
 public abstract class AbstractFigure implements Rotatable {
-    int currentRotation = 0;
+    private int currentRotation = 0;
 
     protected abstract int getFigureCount();
+
+    protected int getCurrentRotation(){
+        return currentRotation;
+    }
 
     public void rotate() {
         if (currentRotation < getFigureCount() - 1) {
@@ -15,4 +19,5 @@ public abstract class AbstractFigure implements Rotatable {
             currentRotation = 0;
         }
     }
+
 }

@@ -32,4 +32,9 @@ public class FigureL extends AbstractFigure {
     protected int getFigureCount() {
         return figures.length;
     }
+
+    @Override
+    public int[][] get() {
+        return figures[getCurrentRotation()];
+    }
 }

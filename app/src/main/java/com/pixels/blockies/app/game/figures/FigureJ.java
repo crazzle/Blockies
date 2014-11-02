@@ -28,9 +28,13 @@ public class FigureJ extends AbstractFigure {
             }
     };
 
-
     @Override
     protected int getFigureCount() {
         return figures.length;
+    }
+
+    @Override
+    public int[][] get() {
+        return figures[getCurrentRotation()];
     }
 }
