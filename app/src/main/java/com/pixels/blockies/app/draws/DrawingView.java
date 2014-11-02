@@ -99,10 +99,6 @@ public class DrawingView extends View implements View.OnTouchListener {
      */
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        int index = motionEvent.getActionIndex();
-        int action = motionEvent.getActionMasked();
-        int pointerId = motionEvent.getPointerId(index);
-
         if (isInit && mover != null) {
             int step = width/StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
