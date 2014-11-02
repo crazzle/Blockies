@@ -30,8 +30,8 @@ public class BlockMover implements Runnable {
         }
     }
 
-    private void moveBlockDown() {
-        if (!isGroundReachedOnNext() && !isNextOccupied()) {
+    public synchronized void moveBlockDown() {
+        if (block != null && !isGroundReachedOnNext() && !isNextOccupied()) {
             removeOldPosition();
             int currentRow = block.getY();
             block.setY(++currentRow);
@@ -45,10 +45,6 @@ public class BlockMover implements Runnable {
         return grid.getPositionValue(block.getX(), block.getY()+1) == 1;
     }
 
-    private boolean isHorizontalNeighborOccupied(int x) {
-        return grid.getPositionValue(x, block.getY()) == 1;
-    }
-
     private void addNewPosition() {
         int x = block.getX();
         int y = block.getY();
@@ -56,11 +52,15 @@ public class BlockMover implements Runnable {
     }
 
     public void moveHorizontalPosition(int x){
-        if(isBlockInGame() && !isHorizontalNeighborOccupied(x)){
+        if(isBlockInGame() && !isHorizontalNeighborOccupied(block.getX()+x)){
             removeOldPosition();
-            block.setX(x);
+            block.setX(block.getX()+x);
             addNewPosition();
         }
+    }
+
+    private boolean isHorizontalNeighborOccupied(int x) {
+        return x < 0 || x > StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT-1 || grid.getPositionValue(x, block.getY()) == 1;
     }
 
     private void removeOldPosition() {
@@ -72,7 +72,7 @@ public class BlockMover implements Runnable {
     public void putNewBlockInGame() {
         Block b = new Block();
         b.setY(0);
-        b.setX(0);
+        b.setX(StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT/2);
         this.block = b;
     }
 
