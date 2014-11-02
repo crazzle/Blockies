@@ -2,22 +2,27 @@ package com.pixels.blockies.app.game;
 
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by keinmark on 08.03.14.
  */
 public class BlockMover implements Runnable {
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
     Grid grid = Grid.getInstance();
     Block block = null;
 
-    @Override
-    public void run() {
-        while (true) {
-            doHandle();
-            delay();
-        }
+    public void start() {
+        final Runnable handling = this;
+        final ScheduledFuture moverHandling = scheduler.scheduleAtFixedRate(handling, 0, 500, TimeUnit.MILLISECONDS);
     }
 
-    private void doHandle() {
+    @Override
+    public void run() {
         if (isBlockInGame()) {
             moveBlockDown();
         }else{
@@ -40,6 +45,10 @@ public class BlockMover implements Runnable {
         return grid.getPositionValue(block.getX(), block.getY()+1) == 1;
     }
 
+    private boolean isHorizontalNeighborOccupied(int x) {
+        return grid.getPositionValue(x, block.getY()) == 1;
+    }
+
     private void addNewPosition() {
         int x = block.getX();
         int y = block.getY();
@@ -47,7 +56,7 @@ public class BlockMover implements Runnable {
     }
 
     public void moveHorizontalPosition(int x){
-        if(isBlockInGame()){
+        if(isBlockInGame() && !isHorizontalNeighborOccupied(x)){
             removeOldPosition();
             block.setX(x);
             addNewPosition();
@@ -58,14 +67,6 @@ public class BlockMover implements Runnable {
         int x = block.getX();
         int y = block.getY();
         grid.remove(x, y);
-    }
-
-    private void delay() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void putNewBlockInGame() {

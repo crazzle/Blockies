@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.pixels.blockies.app.game.BlockMover;
+import com.pixels.blockies.app.draws.DrawingView;
 
 
 public class GameActivity extends Activity {
@@ -17,8 +18,7 @@ public class GameActivity extends Activity {
         drawView = new DrawingView(this);
         mover = new BlockMover();
         mover.putNewBlockInGame();
-        Thread movementThread = new Thread(mover);
-        movementThread.start();
+        mover.start();
         drawView.setBlockMover(mover);
         setContentView(drawView);
     }

@@ -1,4 +1,4 @@
-package com.pixels.blockies.app;
+package com.pixels.blockies.app.draws;
 
 import android.content.Context;
 import android.graphics.Canvas;
