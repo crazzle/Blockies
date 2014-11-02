@@ -25,8 +25,8 @@ public class DrawingView extends View implements View.OnTouchListener {
     int width = -1;
     int height = -1;
     boolean isInit = false;
-    float histX = 0;
-    float histY = 0;
+    float histX = width/2;
+    float histY = height/2;
 
     /**
      * The needed Grid
@@ -105,6 +105,10 @@ public class DrawingView extends View implements View.OnTouchListener {
 
         if (isInit && mover != null) {
             int step = width/StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
+            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                histX = width/2;
+                histY = height/2;
+            }
             if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
                 float x = motionEvent.getX();
                 float deltaX = x-histX;
