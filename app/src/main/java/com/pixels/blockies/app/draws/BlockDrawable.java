@@ -14,20 +14,13 @@ public class BlockDrawable implements Drawable{
     private int x = -1;
     private int y = -1;
 
-    public BlockDrawable(int width, int height, int x, int y){
-        this.width = width;
-        this.height = height;
-        this.x = x;
-        this.y = y;
-    }
-
     public BlockDrawable(int width, int height){
         this.width = width;
         this.height = height;
     }
 
     public void draw(Canvas canvas) {
-        paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setColor(Color.BLUE);
         paint.setStrokeWidth(3);
         canvas.drawRect(x, y, x+width, y+height, paint);
@@ -43,10 +36,6 @@ public class BlockDrawable implements Drawable{
 
     public void setY(int y){
         this.y = y;
-    }
-
-    public int getHeight(){
-        return height;
     }
 
 }

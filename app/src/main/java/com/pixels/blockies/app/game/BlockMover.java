@@ -1,6 +1,7 @@
 package com.pixels.blockies.app.game;
 
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
+import com.pixels.blockies.app.game.figures.FigureT;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,14 +19,14 @@ public class BlockMover implements Runnable {
 
     public void start() {
         final Runnable handling = this;
-        final ScheduledFuture moverHandling = scheduler.scheduleAtFixedRate(handling, 0, 500, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(handling, 0, 500, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         if (isBlockInGame()) {
             moveBlockDown();
-        }else{
+        } else {
             putNewBlockInGame();
         }
     }
@@ -42,61 +43,97 @@ public class BlockMover implements Runnable {
     }
 
     private boolean isNextOccupied() {
-        return grid.getPositionValue(block.getX(), block.getY()+1) == 1;
+        boolean check = false;
+        for (int i = 0; i < block.getOffsetX(); i++) {
+            for (int j = 0; j < block.getOffsetY(); j++) {
+                int nextRow = j+1;
+                boolean isLastRow = nextRow >= block.getOffsetY();
+                boolean compoundBlocksNotItself = nextRow < block.getOffsetY() && !(block.getInner(i, nextRow) == 1);
+                if (block.getInner(i, j) == 1 && (isLastRow || compoundBlocksNotItself)) {
+                    if (grid.getPositionValue(i + block.getX(), j + 1 + block.getY()) == 1) {
+                        check = true;
+                    }
+                }
+            }
+        }
+        return check;
     }
 
     private void addNewPosition() {
-        int x = block.getX();
-        int y = block.getY();
-        grid.add(x, y);
+        for (int i = 0; i < block.getOffsetX(); i++) {
+            for (int j = 0; j < block.getOffsetY(); j++) {
+                if (block.getY() + j < StaticGameEnvironment.VERTICAL_BLOCK_COUNT) {
+                    if (block.getInner(i, j) != 0) {
+                        grid.add(block.getX() + i, block.getY() + j, block.getInner(i, j));
+                    }
+                }
+            }
+        }
     }
 
-    public void moveHorizontalPosition(int x){
-        if(isBlockInGame() && !isHorizontalNeighborOccupied(block.getX()+x)){
+    public synchronized void moveHorizontalPosition(int offset) {
+        if (isBlockInGame() && !isHorizontalNeighborOccupied(offset)) {
             removeOldPosition();
-            block.setX(block.getX()+x);
+            block.setX(block.getX() + offset);
             addNewPosition();
         }
     }
 
-    private boolean isHorizontalNeighborOccupied(int x) {
-        return x < 0 || x > StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT-1 || grid.getPositionValue(x, block.getY()) == 1;
+    private boolean isHorizontalNeighborOccupied(int offset) {
+        boolean check = false;
+        if(block.getX()+offset < 0){
+            check = true;
+        }else if(block.getX() + offset + block.getOffsetX() > StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT) {
+            check = true;
+        }else {
+            for (int i = 0; i < block.getOffsetX(); i++) {
+                for (int j = 0; j < block.getOffsetY(); j++) {
+                    int nextColumn = i+offset;
+                    boolean isLastColumn = offset < 0 ? nextColumn < 0 : nextColumn >= block.getOffsetX();
+                    boolean compoundBlocksNotItself = (offset < 0 ? nextColumn >= 0 : nextColumn < block.getOffsetX())
+                            && !(block.getInner(nextColumn, j) == 1);
+                    if (block.getInner(i, j) == 1 && (isLastColumn || compoundBlocksNotItself)) {
+                        if (grid.getPositionValue(block.getX() + i + offset, j + block.getY()) == 1) {
+                            check = true;
+                        }
+                    }
+                }
+            }
+        }
+        return check;
     }
 
     private void removeOldPosition() {
-        int x = block.getX();
-        int y = block.getY();
-        grid.remove(x, y);
+        for (int i = 0; i < block.getOffsetX(); i++) {
+            for (int j = 0; j < block.getOffsetY(); j++) {
+                if (block.getInner(i, j) != 0) {
+                    grid.remove(block.getX() + i,  block.getY() + j);
+                }
+            }
+        }
     }
 
-    public void putNewBlockInGame() {
-        Block b = new Block();
+    public synchronized void putNewBlockInGame() {
+        Block b = new Block(new FigureT().get());
         b.setY(0);
-        b.setX(StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT/2);
+        b.setX(StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT / 2);
         this.block = b;
     }
 
-    public boolean isBlockInGame() {
+    private boolean isBlockInGame() {
         return block != null;
     }
 
     private boolean isGroundReachedOnNext() {
-        return (block.getY()+1) >= StaticGameEnvironment.VERTICAL_BLOCK_COUNT;
+        boolean check = false;
+        if ((block.getY() + block.getOffsetY()) >= StaticGameEnvironment.VERTICAL_BLOCK_COUNT) {
+            check = true;
+        }
+        return check;
     }
 
     private void removeBlock() {
         this.block = null;
     }
 
-    public void moveToBottom() {
-        if(isBlockInGame()) {
-            removeOldPosition();
-            while(!isGroundReachedOnNext() && !isNextOccupied()){
-                int y = block.getY();
-                block.setY(++y);
-            }
-            addNewPosition();
-            removeBlock();
-        }
-    }
 }

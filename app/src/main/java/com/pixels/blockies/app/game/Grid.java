@@ -29,8 +29,8 @@ public class Grid {
         }
     }
 
-    public void add(int x, int y) {
-        logicalGrid[x][y] = 1;
+    public void add(int x, int y, int value) {
+        logicalGrid[x][y] = value;
     }
 
     public void remove(int x, int y) {
@@ -41,15 +41,4 @@ public class Grid {
         return logicalGrid[x][y];
     }
 
-    public int getLowestFreeInColumn(int x){
-        int freeCell = -1;
-        for(int i = logicalGrid[x].length-1; i >= 0 ; i--){
-            int cell = logicalGrid[x][i];
-            if(cell == 0){
-                freeCell = cell;
-                break;
-            }
-        }
-        return freeCell;
-    }
 }
