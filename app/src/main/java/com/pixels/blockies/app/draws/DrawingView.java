@@ -100,13 +100,13 @@ public class DrawingView extends View implements View.OnTouchListener {
         if (isInit && mover != null) {
             int step = width / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                histX = width / 2;
-                histY = height / 2;
+                histX = width / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT * mover.getCurrentX();
+                histY = height / StaticGameEnvironment.VERTICAL_BLOCK_COUNT * mover.getCurrentY();
             }
             if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 float x = motionEvent.getX();
                 float deltaX = x - histX;
-                if (Math.abs(deltaX) > step / 1.5) {
+                if (Math.abs(deltaX) > step/1.25) {
                     histX = x;
                     int direction = deltaX < 0 ? -1 : 1;
                     mover.moveHorizontalPosition(direction);
