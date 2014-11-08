@@ -12,6 +12,14 @@ public abstract class AbstractFigure implements Rotatable {
         return currentRotation;
     }
 
+    protected int getNextRotation() {
+        if (currentRotation < getFigureCount() - 1) {
+            return currentRotation+1;
+        } else {
+            return 0;
+        }
+    }
+
     public void rotate() {
         if (currentRotation < getFigureCount() - 1) {
             currentRotation++;

@@ -20,9 +20,12 @@ public class BlockDrawable implements Drawable {
     }
 
     public void draw(Canvas canvas) {
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLUE);
         paint.setStrokeWidth(3);
+        canvas.drawRect(x, y, x + width, y + height, paint);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.BLACK);
         canvas.drawRect(x, y, x + width, y + height, paint);
     }
 

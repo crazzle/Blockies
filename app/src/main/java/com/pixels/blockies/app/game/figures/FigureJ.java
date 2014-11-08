@@ -35,4 +35,9 @@ public class FigureJ extends AbstractFigure {
     public int[][] get() {
         return figures[getCurrentRotation()];
     }
+
+    @Override
+    public int[][] getNext() {
+        return figures[getNextRotation()];
+    }
 }

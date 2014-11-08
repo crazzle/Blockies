@@ -19,7 +19,7 @@ public class BlockMover implements Runnable {
 
     public void start() {
         final Runnable handling = this;
-        scheduler.scheduleAtFixedRate(handling, 0, 500, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(handling, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class BlockMover implements Runnable {
     }
 
     public synchronized void putNewBlockInGame() {
-        Block b = new Block(picker.pick().get());
+        Block b = new Block(picker.pick());
         b.setY(0);
         b.setX(StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT / 2);
         this.block = b;
@@ -137,19 +137,49 @@ public class BlockMover implements Runnable {
     }
 
     public synchronized int getCurrentX() {
-        if(isBlockInGame()) {
-            return this.block.getX()+block.getOffsetX()/2;
-        }else {
+        if (isBlockInGame()) {
+            return this.block.getX() + block.getOffsetX() / 2;
+        } else {
             return 0;
         }
     }
 
     public synchronized int getCurrentY() {
-        if(isBlockInGame()) {
+        if (isBlockInGame()) {
             return this.block.getY() + block.getOffsetY() / 2;
-        }else {
+        } else {
             return 0;
         }
+    }
+
+    public synchronized void rotate() {
+        if (isBlockInGame() && isRotatable()) {
+            removeOldPosition();
+            this.block.rotate();
+            addNewPosition();
+        }
+    }
+
+    private boolean isRotatable() {
+        boolean check = true;
+        if (block.getX() + block.getRotatedOffsetX() < 0) {
+            check = false;
+        } else if (block.getX() + block.getRotatedOffsetX() > StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT) {
+            check = false;
+        } else if (block.getY() + block.getRotatedOffsetY() > StaticGameEnvironment.VERTICAL_BLOCK_COUNT) {
+            check = false;
+        } else {
+            for (int i = 0; i < block.getRotatedOffsetX(); i++) {
+                for (int j = 0; j < block.getRotatedOffsetY(); j++) {
+                    if (block.getRotatedInner(i, j) == 1) {
+                        if (grid.getPositionValue(i + block.getRotatedOffsetX(), j + block.getRotatedOffsetY()) == 1) {
+                            check = false;
+                        }
+                    }
+                }
+            }
+        }
+        return check;
     }
 
 }

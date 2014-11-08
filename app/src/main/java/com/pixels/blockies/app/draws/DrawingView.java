@@ -2,6 +2,8 @@ package com.pixels.blockies.app.draws;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
@@ -20,6 +22,26 @@ public class DrawingView extends View implements View.OnTouchListener {
     boolean isInit = false;
     float histX = width / 2;
     float histY = height / 2;
+    GestureDetector gestureDetector = new GestureDetector(this.getContext(), new GestureDetector.SimpleOnGestureListener());
+
+    private class DoubleTapListener implements GestureDetector.OnDoubleTapListener{
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            mover.rotate();
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            return false;
+        }
+    }
 
     /**
      * The needed Grid
@@ -34,6 +56,8 @@ public class DrawingView extends View implements View.OnTouchListener {
      */
     public DrawingView(Context context) {
         super(context);
+        this.gestureDetector.setOnDoubleTapListener(new DoubleTapListener());
+        this.setBackgroundColor(Color.rgb(22,160,133));
     }
 
     /**
@@ -106,7 +130,7 @@ public class DrawingView extends View implements View.OnTouchListener {
             if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 float x = motionEvent.getX();
                 float deltaX = x - histX;
-                if (Math.abs(deltaX) > step/1.25) {
+                if (Math.abs(deltaX) > step / 1.25) {
                     histX = x;
                     int direction = deltaX < 0 ? -1 : 1;
                     mover.moveHorizontalPosition(direction);
@@ -121,6 +145,7 @@ public class DrawingView extends View implements View.OnTouchListener {
                     }
                 }
             }
+            this.gestureDetector.onTouchEvent(motionEvent);
         }
         return true;
     }

@@ -1,14 +1,18 @@
 package com.pixels.blockies.app.game;
 
+import com.pixels.blockies.app.game.figures.Rotatable;
+
 /**
  * Created by keinhoerster on 3/18/14.
  */
 public class Block {
     int x = -1;
     int y = -1;
-    private int[][] compound = null;
-    public Block(int[][] compound) {
-        this.compound = compound;
+    Rotatable figure = null;
+
+    public Block(Rotatable figure)
+    {
+        this.figure = figure;
     }
 
     public int getX() {
@@ -28,14 +32,30 @@ public class Block {
     }
 
     public int getInner(int x, int y) {
-        return compound[y][x];
+        return figure.get()[y][x];
     }
 
     public int getOffsetY() {
-        return compound.length;
+        return figure.get().length;
     }
 
     public int getOffsetX() {
-        return compound[0].length;
+        return figure.get()[0].length;
+    }
+
+    public void rotate(){
+        figure.rotate();
+    }
+
+    public int getRotatedInner(int x, int y){
+        return figure.getNext()[y][x];
+    }
+
+    public int getRotatedOffsetY() {
+        return figure.getNext().length;
+    }
+
+    public int getRotatedOffsetX() {
+        return figure.getNext()[0].length;
     }
 }

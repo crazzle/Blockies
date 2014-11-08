@@ -7,13 +7,8 @@ public class FigureO extends AbstractFigure {
 
     private int[][][] figures = new int[][][]{
             {
-                    {1, 0},
                     {1, 1},
-                    {0, 1}
-            },
-            {
-                    {0, 1, 1},
-                    {1, 1, 0}
+                    {1, 1},
             }
     };
 
@@ -25,5 +20,10 @@ public class FigureO extends AbstractFigure {
     @Override
     public int[][] get() {
         return figures[getCurrentRotation()];
+    }
+
+    @Override
+    public int[][] getNext() {
+        return figures[getNextRotation()];
     }
 }

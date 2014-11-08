@@ -41,9 +41,6 @@ public class GridDrawable implements Drawable {
 
     @Override
     public void draw(Canvas canvas) {
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.RED);
-        paint.setStrokeWidth(STROKE);
         updateFromLogicalGrid();
         for (int i = 0; i < blockDrawables.length; i++) {
             for (int j = 0; j < blockDrawables[i].length; j++) {
