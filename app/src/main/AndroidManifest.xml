@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pixels.blockies.app" >
+          package="com.pixels.blockies.app">
 
     <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name="com.pixels.blockies.app.GameActivity"
-            android:screenOrientation="portrait"
+            android:allowBackup="true"
+            android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
-            android:theme="@style/android:Theme.Holo.Light.NoActionBar.Fullscreen" >
+            android:theme="@style/AppTheme">
+        <activity
+                android:name="com.pixels.blockies.app.GameActivity"
+                android:screenOrientation="portrait"
+                android:label="@string/app_name"
+                android:theme="@style/android:Theme.Holo.Light.NoActionBar.Fullscreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>

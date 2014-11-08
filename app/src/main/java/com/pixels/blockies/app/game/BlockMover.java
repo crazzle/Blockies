@@ -1,12 +1,10 @@
 package com.pixels.blockies.app.game;
 
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
-import com.pixels.blockies.app.game.figures.FigureT;
 import com.pixels.blockies.app.game.figures.Picker;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,7 +46,7 @@ public class BlockMover implements Runnable {
         boolean check = false;
         for (int i = 0; i < block.getOffsetX(); i++) {
             for (int j = 0; j < block.getOffsetY(); j++) {
-                int nextRow = j+1;
+                int nextRow = j + 1;
                 boolean isLastRow = nextRow >= block.getOffsetY();
                 boolean compoundBlocksNotItself = nextRow < block.getOffsetY() && !(block.getInner(i, nextRow) == 1);
                 if (block.getInner(i, j) == 1 && (isLastRow || compoundBlocksNotItself)) {
@@ -83,14 +81,14 @@ public class BlockMover implements Runnable {
 
     private boolean isHorizontalNeighborOccupied(int offset) {
         boolean check = false;
-        if(block.getX()+offset < 0){
+        if (block.getX() + offset < 0) {
             check = true;
-        }else if(block.getX() + offset + block.getOffsetX() > StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT) {
+        } else if (block.getX() + offset + block.getOffsetX() > StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT) {
             check = true;
-        }else {
+        } else {
             for (int i = 0; i < block.getOffsetX(); i++) {
                 for (int j = 0; j < block.getOffsetY(); j++) {
-                    int nextColumn = i+offset;
+                    int nextColumn = i + offset;
                     boolean isLastColumn = offset < 0 ? nextColumn < 0 : nextColumn >= block.getOffsetX();
                     boolean compoundBlocksNotItself = (offset < 0 ? nextColumn >= 0 : nextColumn < block.getOffsetX())
                             && !(block.getInner(nextColumn, j) == 1);
@@ -109,7 +107,7 @@ public class BlockMover implements Runnable {
         for (int i = 0; i < block.getOffsetX(); i++) {
             for (int j = 0; j < block.getOffsetY(); j++) {
                 if (block.getInner(i, j) != 0) {
-                    grid.remove(block.getX() + i,  block.getY() + j);
+                    grid.remove(block.getX() + i, block.getY() + j);
                 }
             }
         }

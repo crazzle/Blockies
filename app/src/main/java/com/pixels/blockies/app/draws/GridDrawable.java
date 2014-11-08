@@ -3,7 +3,6 @@ package com.pixels.blockies.app.draws;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.Grid;
 
@@ -12,14 +11,13 @@ import com.pixels.blockies.app.game.Grid;
  */
 public class GridDrawable implements Drawable {
     /**
-     * Singleton instance
-     */
-    private static GridDrawable grid = null;
-
-    /**
      * Define Layout-Values
      */
     public static final int STROKE = 3;
+    /**
+     * Singleton instance
+     */
+    private static GridDrawable grid = null;
     int cellHeight = -1;
     int cellWidth = -1;
 
@@ -30,12 +28,12 @@ public class GridDrawable implements Drawable {
     BlockDrawable[][] blockDrawables = new BlockDrawable[StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT][StaticGameEnvironment.VERTICAL_BLOCK_COUNT];
     Grid logicalGrid = Grid.getInstance();
 
-    private GridDrawable(){
+    private GridDrawable() {
 
     }
 
-    public static GridDrawable getInstance(){
-        if(grid == null){
+    public static GridDrawable getInstance() {
+        if (grid == null) {
             grid = new GridDrawable();
         }
         return grid;
@@ -49,7 +47,7 @@ public class GridDrawable implements Drawable {
         updateFromLogicalGrid();
         for (int i = 0; i < blockDrawables.length; i++) {
             for (int j = 0; j < blockDrawables[i].length; j++) {
-                if(blockDrawables[i][j] != null) {
+                if (blockDrawables[i][j] != null) {
                     blockDrawables[i][j].draw(canvas);
                 }
             }
@@ -60,12 +58,12 @@ public class GridDrawable implements Drawable {
         for (int i = 0; i < blockDrawables.length; i++) {
             BlockDrawable[] line = blockDrawables[i];
             for (int j = 0; j < line.length; j++) {
-                if(logicalGrid.getPositionValue(i,j) == 1) {
+                if (logicalGrid.getPositionValue(i, j) == 1) {
                     BlockDrawable b = new BlockDrawable(cellWidth, cellHeight);
                     b.setX((i * cellWidth) + StaticGameEnvironment.BORDER);
                     b.setY((j * cellHeight) + StaticGameEnvironment.BORDER);
                     line[j] = b;
-                }else{
+                } else {
                     line[j] = null;
                 }
             }

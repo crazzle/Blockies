@@ -7,14 +7,14 @@ import android.graphics.Paint;
 /**
  * Created by keinmark on 08.03.14.
  */
-public class BlockDrawable implements Drawable{
+public class BlockDrawable implements Drawable {
     Paint paint = new Paint();
     private int width = 0;
     private int height = 0;
     private int x = -1;
     private int y = -1;
 
-    public BlockDrawable(int width, int height){
+    public BlockDrawable(int width, int height) {
         this.width = width;
         this.height = height;
     }
@@ -23,18 +23,18 @@ public class BlockDrawable implements Drawable{
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setColor(Color.BLUE);
         paint.setStrokeWidth(3);
-        canvas.drawRect(x, y, x+width, y+height, paint);
+        canvas.drawRect(x, y, x + width, y + height, paint);
     }
 
-    public void setX(int x){
+    public void setX(int x) {
         this.x = x;
     }
 
-    public int getY(){
+    public int getY() {
         return y;
     }
 
-    public void setY(int y){
+    public void setY(int y) {
         this.y = y;
     }
 

@@ -11,19 +11,29 @@ public class Picker {
     Random random = new Random();
     Queue<Rotatable> queue = new LinkedList<Rotatable>();
 
-    public Picker(){
+    public Picker() {
         queue.add(get());
     }
 
-    private Rotatable get(){
+    private Rotatable get() {
         int num = random.nextInt(5);
         Rotatable picked = null;
-        switch(num){
-            case 0: picked = new FigureI();break;
-            case 1: picked = new FigureJ();break;
-            case 2: picked = new FigureL();break;
-            case 3: picked = new FigureT();break;
-            case 4: picked = new FigureZ();break;
+        switch (num) {
+            case 0:
+                picked = new FigureI();
+                break;
+            case 1:
+                picked = new FigureJ();
+                break;
+            case 2:
+                picked = new FigureL();
+                break;
+            case 3:
+                picked = new FigureT();
+                break;
+            case 4:
+                picked = new FigureZ();
+                break;
         }
         return picked;
     }

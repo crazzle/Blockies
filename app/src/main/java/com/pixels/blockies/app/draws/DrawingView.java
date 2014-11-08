@@ -2,15 +2,8 @@ package com.pixels.blockies.app.draws;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.VelocityTrackerCompat;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
-
-import com.pixels.blockies.app.draws.GridDrawable;
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.BlockMover;
 
@@ -25,8 +18,8 @@ public class DrawingView extends View implements View.OnTouchListener {
     int width = -1;
     int height = -1;
     boolean isInit = false;
-    float histX = width/2;
-    float histY = height/2;
+    float histX = width / 2;
+    float histY = height / 2;
 
     /**
      * The needed Grid
@@ -36,6 +29,7 @@ public class DrawingView extends View implements View.OnTouchListener {
 
     /**
      * Constructor
+     *
      * @param context
      */
     public DrawingView(Context context) {
@@ -57,6 +51,7 @@ public class DrawingView extends View implements View.OnTouchListener {
 
     /**
      * Initialize grid
+     *
      * @param blockHeight
      * @param blockWidth
      */
@@ -67,6 +62,7 @@ public class DrawingView extends View implements View.OnTouchListener {
 
     /**
      * Draw
+     *
      * @param canvas
      */
     @Override
@@ -79,6 +75,7 @@ public class DrawingView extends View implements View.OnTouchListener {
 
     /**
      * Get device resolution to draw perfect layout
+     *
      * @param xNew
      * @param yNew
      * @param xOld
@@ -93,6 +90,7 @@ public class DrawingView extends View implements View.OnTouchListener {
 
     /**
      * Recognize block movement by touch
+     *
      * @param view
      * @param motionEvent
      * @return
@@ -100,15 +98,15 @@ public class DrawingView extends View implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (isInit && mover != null) {
-            int step = width/StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
-            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                histX = width/2;
-                histY = height/2;
+            int step = width / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                histX = width / 2;
+                histY = height / 2;
             }
-            if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 float x = motionEvent.getX();
-                float deltaX = x-histX;
-                if(Math.abs(deltaX) > step/1.5) {
+                float deltaX = x - histX;
+                if (Math.abs(deltaX) > step / 1.5) {
                     histX = x;
                     int direction = deltaX < 0 ? -1 : 1;
                     mover.moveHorizontalPosition(direction);
@@ -116,9 +114,9 @@ public class DrawingView extends View implements View.OnTouchListener {
 
                 float y = motionEvent.getY();
                 float deltaY = y - histY;
-                if(Math.abs(deltaY) > step/2){
+                if (Math.abs(deltaY) > step / 2) {
                     histY = y;
-                    if(deltaY > 0) {
+                    if (deltaY > 0) {
                         mover.moveBlockDown();
                     }
                 }

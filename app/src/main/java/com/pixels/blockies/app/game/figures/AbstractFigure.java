@@ -8,7 +8,7 @@ public abstract class AbstractFigure implements Rotatable {
 
     protected abstract int getFigureCount();
 
-    protected int getCurrentRotation(){
+    protected int getCurrentRotation() {
         return currentRotation;
     }
 
