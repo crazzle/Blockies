@@ -2,6 +2,7 @@ package com.pixels.blockies.app.game;
 
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.figures.FigureT;
+import com.pixels.blockies.app.game.figures.Picker;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -16,6 +17,7 @@ public class BlockMover implements Runnable {
 
     Grid grid = Grid.getInstance();
     Block block = null;
+    Picker picker = new Picker();
 
     public void start() {
         final Runnable handling = this;
@@ -114,7 +116,7 @@ public class BlockMover implements Runnable {
     }
 
     public synchronized void putNewBlockInGame() {
-        Block b = new Block(new FigureT().get());
+        Block b = new Block(picker.pick().get());
         b.setY(0);
         b.setX(StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT / 2);
         this.block = b;

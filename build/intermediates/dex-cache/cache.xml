@@ -2,8 +2,8 @@
 <pre-dex-items>
 
     <item
-        dex="/home/mark/IdeaProjects/Blockies/app/build/intermediates/pre-dexed/debug/support-v4-19.0.0-4ac6b1b9fede9e222f035928f3cbe5e11b48ecb1.jar"
-        jar="/home/mark/Development/adt-bundle-linux-x86_64-20140702/sdk/extras/android/m2repository/com/android/support/support-v4/19.0.0/support-v4-19.0.0.jar"
+        dex="/Users/mark/git/Blockies/app/build/intermediates/pre-dexed/debug/support-v4-19.0.0-375a3a5042206b21a355614b8437f3bf93ff3e86.jar"
+        jar="/Users/mark/Development/android-sdk-macosx/extras/android/m2repository/com/android/support/support-v4/19.0.0/support-v4-19.0.0.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="afee690af14bd2c32d400cdf78e746fd45c386fa"/>
