@@ -1,7 +1,6 @@
 package com.pixels.blockies.app.draws;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 /**
@@ -13,19 +12,25 @@ public class BlockDrawable implements Drawable {
     private int height = 0;
     private int x = -1;
     private int y = -1;
+    private int specificColor = -1;
 
-    public BlockDrawable(int width, int height) {
+    public BlockDrawable(int width, int height, int specificColor) {
         this.width = width;
         this.height = height;
+        this.specificColor = specificColor;
     }
 
     public void draw(Canvas canvas) {
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.BLUE);
-        paint.setStrokeWidth(3);
+        paint.setColor(specificColor);
         canvas.drawRect(x, y, x + width, y + height, paint);
+        drawStroke(canvas);
+    }
+
+    public void drawStroke(Canvas canvas){
+        paint.setStrokeWidth(10);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.BLACK);
+        paint.setColor(GameColor.WHITE.getColor());
         canvas.drawRect(x, y, x + width, y + height, paint);
     }
 

@@ -1,7 +1,6 @@
 package com.pixels.blockies.app.draws;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.Grid;
@@ -24,7 +23,6 @@ public class GridDrawable implements Drawable {
     /**
      * Drawing related
      */
-    Paint paint = new Paint();
     BlockDrawable[][] blockDrawables = new BlockDrawable[StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT][StaticGameEnvironment.VERTICAL_BLOCK_COUNT];
     Grid logicalGrid = Grid.getInstance();
 
@@ -55,8 +53,9 @@ public class GridDrawable implements Drawable {
         for (int i = 0; i < blockDrawables.length; i++) {
             BlockDrawable[] line = blockDrawables[i];
             for (int j = 0; j < line.length; j++) {
-                if (logicalGrid.getPositionValue(i, j) == 1) {
-                    BlockDrawable b = new BlockDrawable(cellWidth, cellHeight);
+                if (logicalGrid.getPositionValue(i, j) > -1) {
+                    int blockColor = GameColor.forFigureNumber(logicalGrid.getPositionValue(i, j));
+                    BlockDrawable b = new BlockDrawable(cellWidth, cellHeight, blockColor);
                     b.setX((i * cellWidth) + StaticGameEnvironment.BORDER);
                     b.setY((j * cellHeight) + StaticGameEnvironment.BORDER);
                     line[j] = b;

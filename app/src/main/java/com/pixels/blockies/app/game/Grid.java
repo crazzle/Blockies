@@ -24,7 +24,7 @@ public class Grid {
     private void initLogicalGrid() {
         for (int i = 0; i < logicalGrid.length; i++) {
             for (int j = 0; j < logicalGrid[i].length; j++) {
-                logicalGrid[i][j] = 0;
+                logicalGrid[i][j] = -1;
             }
         }
     }
@@ -34,7 +34,7 @@ public class Grid {
     }
 
     public void remove(int x, int y) {
-        logicalGrid[x][y] = 0;
+        logicalGrid[x][y] = -1;
     }
 
     public int getPositionValue(int x, int y) {

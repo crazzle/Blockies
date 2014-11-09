@@ -1,19 +1,16 @@
 package com.pixels.blockies.app.game.figures;
 
-/**
- * Created by keinmark on 30.04.14.
- */
 public class FigureZ extends AbstractFigure {
 
     private int[][][] figures = new int[][][]{
             {
-                    {1, 0},
-                    {1, 1},
-                    {0, 1}
+                    {5, -1},
+                    {5, 5},
+                    {-1, 5}
             },
             {
-                    {0, 1, 1},
-                    {1, 1, 0}
+                    {-1, 5, 5},
+                    {5, 5, -1}
             }
     };
 

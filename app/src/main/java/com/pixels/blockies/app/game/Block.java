@@ -58,4 +58,5 @@ public class Block {
     public int getRotatedOffsetX() {
         return figure.getNext()[0].length;
     }
+
 }

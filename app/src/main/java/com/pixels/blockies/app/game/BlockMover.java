@@ -7,9 +7,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by keinmark on 08.03.14.
- */
 public class BlockMover implements Runnable {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -48,9 +45,9 @@ public class BlockMover implements Runnable {
             for (int j = 0; j < block.getOffsetY(); j++) {
                 int nextRow = j + 1;
                 boolean isLastRow = nextRow >= block.getOffsetY();
-                boolean compoundBlocksNotItself = nextRow < block.getOffsetY() && !(block.getInner(i, nextRow) == 1);
-                if (block.getInner(i, j) == 1 && (isLastRow || compoundBlocksNotItself)) {
-                    if (grid.getPositionValue(i + block.getX(), j + 1 + block.getY()) == 1) {
+                boolean compoundBlocksNotItself = nextRow < block.getOffsetY() && !(block.getInner(i, nextRow) > -1);
+                if (block.getInner(i, j) > -1 && (isLastRow || compoundBlocksNotItself)) {
+                    if (grid.getPositionValue(i + block.getX(), j + 1 + block.getY()) > -1) {
                         check = true;
                     }
                 }
@@ -63,7 +60,7 @@ public class BlockMover implements Runnable {
         for (int i = 0; i < block.getOffsetX(); i++) {
             for (int j = 0; j < block.getOffsetY(); j++) {
                 if (block.getY() + j < StaticGameEnvironment.VERTICAL_BLOCK_COUNT) {
-                    if (block.getInner(i, j) != 0) {
+                    if (block.getInner(i, j) != -1) {
                         grid.add(block.getX() + i, block.getY() + j, block.getInner(i, j));
                     }
                 }
@@ -91,9 +88,9 @@ public class BlockMover implements Runnable {
                     int nextColumn = i + offset;
                     boolean isLastColumn = offset < 0 ? nextColumn < 0 : nextColumn >= block.getOffsetX();
                     boolean compoundBlocksNotItself = (offset < 0 ? nextColumn >= 0 : nextColumn < block.getOffsetX())
-                            && !(block.getInner(nextColumn, j) == 1);
-                    if (block.getInner(i, j) == 1 && (isLastColumn || compoundBlocksNotItself)) {
-                        if (grid.getPositionValue(block.getX() + i + offset, j + block.getY()) == 1) {
+                            && !(block.getInner(nextColumn, j) > 0);
+                    if (block.getInner(i, j) > -1 && (isLastColumn || compoundBlocksNotItself)) {
+                        if (grid.getPositionValue(block.getX() + i + offset, j + block.getY()) > -1) {
                             check = true;
                         }
                     }
@@ -106,7 +103,7 @@ public class BlockMover implements Runnable {
     private void removeOldPosition() {
         for (int i = 0; i < block.getOffsetX(); i++) {
             for (int j = 0; j < block.getOffsetY(); j++) {
-                if (block.getInner(i, j) != 0) {
+                if (block.getInner(i, j) != -1) {
                     grid.remove(block.getX() + i, block.getY() + j);
                 }
             }
@@ -171,8 +168,8 @@ public class BlockMover implements Runnable {
         } else {
             for (int i = 0; i < block.getRotatedOffsetX(); i++) {
                 for (int j = 0; j < block.getRotatedOffsetY(); j++) {
-                    if (block.getRotatedInner(i, j) == 1) {
-                        if (grid.getPositionValue(i + block.getRotatedOffsetX(), j + block.getRotatedOffsetY()) == 1) {
+                    if (block.getRotatedInner(i, j) > -1) {
+                        if (grid.getPositionValue(i + block.getRotatedOffsetX(), j + block.getRotatedOffsetY()) > -1) {
                             check = false;
                         }
                     }
@@ -181,5 +178,4 @@ public class BlockMover implements Runnable {
         }
         return check;
     }
-
 }

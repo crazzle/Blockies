@@ -2,7 +2,6 @@ package com.pixels.blockies.app.draws;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,7 +56,7 @@ public class DrawingView extends View implements View.OnTouchListener {
     public DrawingView(Context context) {
         super(context);
         this.gestureDetector.setOnDoubleTapListener(new DoubleTapListener());
-        this.setBackgroundColor(Color.rgb(22,160,133));
+        this.setBackgroundColor(GameColor.BLUE.getColor());
     }
 
     /**
