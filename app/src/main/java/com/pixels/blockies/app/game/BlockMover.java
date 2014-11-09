@@ -3,6 +3,7 @@ package com.pixels.blockies.app.game;
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.figures.Picker;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +14,7 @@ public class BlockMover implements Runnable {
     Grid grid = Grid.getInstance();
     Block block = null;
     Picker picker = new Picker();
-
+    Sage sage = new Sage();
     public void start() {
         final Runnable handling = this;
         scheduler.scheduleAtFixedRate(handling, 0, 1000, TimeUnit.MILLISECONDS);
@@ -29,14 +30,21 @@ public class BlockMover implements Runnable {
     }
 
     public synchronized void moveBlockDown() {
-        if (block != null && !isGroundReachedOnNext() && !isNextOccupied()) {
+        if (isBlockInGame()) {
             removeOldPosition();
-            int currentRow = block.getY();
-            block.setY(++currentRow);
+            boolean notFinished = !isGroundReachedOnNext() && !isNextOccupied();
+            if(notFinished) {
+                int currentRow = block.getY();
+                block.setY(++currentRow);
+            }
             addNewPosition();
-        } else {
-            removeBlock();
-            putNewBlockInGame();
+            if(!notFinished){
+                removeBlock();
+                List<Integer> completed = sage.checkForCompleteLines();
+                if(completed.size() > 0) {
+                    grid.shiftRemoveCompleted(completed);
+                }
+            }
         }
     }
 
@@ -44,10 +52,7 @@ public class BlockMover implements Runnable {
         boolean check = false;
         for (int i = 0; i < block.getOffsetX(); i++) {
             for (int j = 0; j < block.getOffsetY(); j++) {
-                int nextRow = j + 1;
-                boolean isLastRow = nextRow >= block.getOffsetY();
-                boolean compoundBlocksNotItself = nextRow < block.getOffsetY() && !(block.getInner(i, nextRow) > -1);
-                if (block.getInner(i, j) > -1 && (isLastRow || compoundBlocksNotItself)) {
+                if (block.getInner(i, j) > -1) {
                     if (grid.getPositionValue(i + block.getX(), j + 1 + block.getY()) > -1) {
                         check = true;
                     }
@@ -70,9 +75,11 @@ public class BlockMover implements Runnable {
     }
 
     public synchronized void moveHorizontalPosition(int offset) {
-        if (isBlockInGame() && !isHorizontalNeighborOccupied(offset)) {
+        if (isBlockInGame()) {
             removeOldPosition();
-            block.setX(block.getX() + offset);
+            if(!isHorizontalNeighborOccupied(offset)) {
+                block.setX(block.getX() + offset);
+            }
             addNewPosition();
         }
     }
@@ -87,10 +94,7 @@ public class BlockMover implements Runnable {
             for (int i = 0; i < block.getOffsetX(); i++) {
                 for (int j = 0; j < block.getOffsetY(); j++) {
                     int nextColumn = i + offset;
-                    boolean isLastColumn = offset < 0 ? nextColumn < 0 : nextColumn >= block.getOffsetX();
-                    boolean compoundBlocksNotItself = (offset < 0 ? nextColumn >= 0 : nextColumn < block.getOffsetX())
-                            && !(block.getInner(nextColumn, j) > 0);
-                    if (block.getInner(i, j) > -1 && (isLastColumn || compoundBlocksNotItself)) {
+                    if (block.getInner(i, j) > -1) {
                         if (grid.getPositionValue(block.getX() + i + offset, j + block.getY()) > -1) {
                             check = true;
                         }

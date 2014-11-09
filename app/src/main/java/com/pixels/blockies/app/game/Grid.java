@@ -2,6 +2,10 @@ package com.pixels.blockies.app.game;
 
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by keinhoerster on 3/17/14.
  */
@@ -29,16 +33,34 @@ public class Grid {
         }
     }
 
-    public void add(int x, int y, int value) {
+    public synchronized void add(int x, int y, int value) {
         logicalGrid[x][y] = value;
     }
 
-    public void remove(int x, int y) {
+    public synchronized void remove(int x, int y) {
         logicalGrid[x][y] = -1;
     }
 
-    public int getPositionValue(int x, int y) {
+    public synchronized int getPositionValue(int x, int y) {
         return logicalGrid[x][y];
     }
 
+    public synchronized void shiftRemoveCompleted(List<Integer> completed) {
+        for(int index : completed){
+            System.out.println(index);
+            for(int[] column : logicalGrid){
+                ArrayList<Integer> columnAsList = new ArrayList<Integer>();
+                for(int i = 0; i < column.length; i++){
+                    columnAsList.add(column[i]);
+                }
+                columnAsList.remove(index);
+                columnAsList.add(0, -1);
+                int[] strippedColumn = new int[StaticGameEnvironment.VERTICAL_BLOCK_COUNT];
+                for(int i = strippedColumn.length-1; i >= 0; i--){
+                    strippedColumn[i] = columnAsList.get(i);
+                }
+                System.arraycopy(strippedColumn, 0, column, 0, StaticGameEnvironment.VERTICAL_BLOCK_COUNT);
+            }
+        }
+    }
 }

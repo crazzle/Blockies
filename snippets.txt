@@ -72,3 +72,45 @@ The drawing view with onFlingListener:
                     }
                     return freeCell;
                 }
+
+
+                private boolean isHorizontalNeighborOccupied(int offset) {
+                        boolean check = false;
+                        if (block.getX() + offset < 0) {
+                            check = true;
+                        } else if (block.getX() + offset + block.getOffsetX() > StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT) {
+                            check = true;
+                        } else {
+                            for (int i = 0; i < block.getOffsetX(); i++) {
+                                for (int j = 0; j < block.getOffsetY(); j++) {
+                                    int nextColumn = i + offset;
+                                    boolean isLastColumn = offset < 0 ? nextColumn < 0 : nextColumn >= block.getOffsetX();
+                                    boolean compoundBlocksNotItself = (offset < 0 ? nextColumn >= 0 : nextColumn < block.getOffsetX())
+                                            && !(block.getInner(nextColumn, j) > 0);
+                                    if (block.getInner(i, j) > -1 && (isLastColumn || compoundBlocksNotItself)) {
+                                        if (grid.getPositionValue(block.getX() + i + offset, j + block.getY()) > -1) {
+                                            check = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        return check;
+                    }
+
+            private boolean isNextOccupied() {
+                    boolean check = false;
+                    for (int i = 0; i < block.getOffsetX(); i++) {
+                        for (int j = 0; j < block.getOffsetY(); j++) {
+                            int nextRow = j + 1;
+                            boolean isLastRow = nextRow >= block.getOffsetY();
+                            boolean compoundBlocksNotItself = nextRow < block.getOffsetY() && !(block.getInner(i, nextRow) > -1);
+                            if (block.getInner(i, j) > -1 && (isLastRow || compoundBlocksNotItself)) {
+                                if (grid.getPositionValue(i + block.getX(), j + 1 + block.getY()) > -1) {
+                                    check = true;
+                                }
+                            }
+                        }
+                    }
+                    return check;
+                }
