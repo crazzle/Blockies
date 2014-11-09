@@ -36,6 +36,7 @@ public class BlockMover implements Runnable {
             addNewPosition();
         } else {
             removeBlock();
+            putNewBlockInGame();
         }
     }
 
@@ -150,9 +151,11 @@ public class BlockMover implements Runnable {
     }
 
     public synchronized void rotate() {
-        if (isBlockInGame() && isRotatable()) {
+        if (isBlockInGame()) {
             removeOldPosition();
-            this.block.rotate();
+            if(isRotatable()) {
+                this.block.rotate();
+            }
             addNewPosition();
         }
     }
@@ -169,7 +172,7 @@ public class BlockMover implements Runnable {
             for (int i = 0; i < block.getRotatedOffsetX(); i++) {
                 for (int j = 0; j < block.getRotatedOffsetY(); j++) {
                     if (block.getRotatedInner(i, j) > -1) {
-                        if (grid.getPositionValue(i + block.getRotatedOffsetX(), j + block.getRotatedOffsetY()) > -1) {
+                        if (grid.getPositionValue(i + block.getX(), j + block.getY()) > -1) {
                             check = false;
                         }
                     }
