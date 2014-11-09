@@ -21,23 +21,38 @@ public class DrawingView extends View implements View.OnTouchListener {
     boolean isInit = false;
     float histX = width / 2;
     float histY = height / 2;
-    GestureDetector gestureDetector = new GestureDetector(this.getContext(), new GestureDetector.SimpleOnGestureListener());
+    GestureDetector gestureDetector = new GestureDetector(this.getContext(), new DoubleTapListener());
 
-    private class DoubleTapListener implements GestureDetector.OnDoubleTapListener{
+    private class DoubleTapListener implements GestureDetector.OnGestureListener{
 
         @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
+        public boolean onDown(MotionEvent e) {
             return false;
         }
 
         @Override
-        public boolean onDoubleTap(MotionEvent e) {
+        public void onShowPress(MotionEvent e) {
+
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
             mover.rotate();
             return true;
         }
 
         @Override
-        public boolean onDoubleTapEvent(MotionEvent e) {
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             return false;
         }
     }
@@ -55,7 +70,6 @@ public class DrawingView extends View implements View.OnTouchListener {
      */
     public DrawingView(Context context) {
         super(context);
-        this.gestureDetector.setOnDoubleTapListener(new DoubleTapListener());
         this.setBackgroundColor(GameColor.BLUE.getColor());
     }
 
@@ -121,15 +135,16 @@ public class DrawingView extends View implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (isInit && mover != null) {
+            this.gestureDetector.onTouchEvent(motionEvent);
             int step = width / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                histX = width / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT * mover.getCurrentX();
-                histY = height / StaticGameEnvironment.VERTICAL_BLOCK_COUNT * mover.getCurrentY();
-            }
-            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                histX = motionEvent.getX();
+                histY = motionEvent.getY();
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 float x = motionEvent.getX();
                 float deltaX = x - histX;
-                if (Math.abs(deltaX) > step / 1.25) {
+                System.out.println("step: " + step + " x_coord: " + motionEvent.getX() + " x: " + x + " histX: " + histX + " deltaX: " + deltaX);
+                if (Math.abs(deltaX) > step/1.25) {
                     histX = x;
                     int direction = deltaX < 0 ? -1 : 1;
                     mover.moveHorizontalPosition(direction);
@@ -137,14 +152,13 @@ public class DrawingView extends View implements View.OnTouchListener {
 
                 float y = motionEvent.getY();
                 float deltaY = y - histY;
-                if (Math.abs(deltaY) > step / 2) {
+                if (Math.abs(deltaY) > step / 1.5) {
                     histY = y;
                     if (deltaY > 0) {
                         mover.moveBlockDown();
                     }
                 }
             }
-            this.gestureDetector.onTouchEvent(motionEvent);
         }
         return true;
     }
