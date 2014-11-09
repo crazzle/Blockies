@@ -47,7 +47,6 @@ public class Grid {
 
     public synchronized void shiftRemoveCompleted(List<Integer> completed) {
         for(int index : completed){
-            System.out.println(index);
             for(int[] column : logicalGrid){
                 ArrayList<Integer> columnAsList = new ArrayList<Integer>();
                 for(int i = 0; i < column.length; i++){

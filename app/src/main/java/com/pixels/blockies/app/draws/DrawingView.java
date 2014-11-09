@@ -143,13 +143,11 @@ public class DrawingView extends View implements View.OnTouchListener {
             } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 float x = motionEvent.getX();
                 float deltaX = x - histX;
-                System.out.println("step: " + step + " x_coord: " + motionEvent.getX() + " x: " + x + " histX: " + histX + " deltaX: " + deltaX);
                 if (Math.abs(deltaX) > step/1.25) {
                     histX = x;
                     int direction = deltaX < 0 ? -1 : 1;
                     mover.moveHorizontalPosition(direction);
                 }
-
                 float y = motionEvent.getY();
                 float deltaY = y - histY;
                 if (Math.abs(deltaY) > step / 1.5) {
