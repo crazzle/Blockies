@@ -16,17 +16,22 @@ public class BlockMover implements Runnable {
     Block block = null;
     Picker picker = StaticGameEnvironment.picker;
     Sage sage = new Sage();
+    boolean lost = false;
+
     public void start() {
         final Runnable handling = this;
-        scheduler.scheduleAtFixedRate(handling, 0, 500, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(handling, 0, 750, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public synchronized void run() {
-        if (isBlockInGame()) {
-            moveBlockDown();
-        } else {
-            putNewBlockInGame();
+        if(!lost) {
+            if (isBlockInGame()) {
+                moveBlockDown();
+            } else {
+                boolean valid = putNewBlockInGame();
+                lost = !valid;
+            }
         }
     }
 
@@ -117,11 +122,24 @@ public class BlockMover implements Runnable {
         }
     }
 
-    public synchronized void putNewBlockInGame() {
+    public synchronized boolean putNewBlockInGame() {
         Block b = new Block(picker.pick());
         b.setY(0);
         b.setX(StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT / 2);
-        this.block = b;
+        boolean check = true;
+        for (int i = 0; i < b.getOffsetX(); i++) {
+            for (int j = 0; j < b.getOffsetY(); j++) {
+                if (b.getInner(i, j) > -1) {
+                    if (grid.getPositionValue(i + b.getX(), j + b.getY()) > -1) {
+                        check = false;
+                    }
+                }
+            }
+        }
+        if(check) {
+            this.block = b;
+        }
+        return check;
     }
 
     private boolean isBlockInGame() {
@@ -188,4 +206,13 @@ public class BlockMover implements Runnable {
         return check;
     }
 
+    public synchronized boolean hasEnded(){
+        return lost;
+    }
+
+    public synchronized void restart() {
+        grid.initLogicalGrid();
+        GameInformation.reset();
+        lost = false;
+    }
 }

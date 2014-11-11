@@ -25,7 +25,7 @@ public class Grid {
         return grid;
     }
 
-    private void initLogicalGrid() {
+    public synchronized void initLogicalGrid() {
         for (int i = 0; i < logicalGrid.length; i++) {
             for (int j = 0; j < logicalGrid[i].length; j++) {
                 logicalGrid[i][j] = -1;

@@ -18,4 +18,8 @@ public class GameInformation {
         return score;
     }
 
+    public static synchronized void reset(){
+        score = 0;
+    }
+
 }

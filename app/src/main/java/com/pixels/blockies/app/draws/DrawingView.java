@@ -2,11 +2,14 @@ package com.pixels.blockies.app.draws;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.BlockMover;
+import com.pixels.blockies.app.game.GameInformation;
 
 /**
  * Created by keinmark on 08.03.14.
@@ -41,7 +44,11 @@ public class DrawingView extends View implements View.OnTouchListener {
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            mover.rotate();
+            if(!mover.hasEnded()){
+                mover.rotate();
+            }else{
+                mover.restart();
+            }
             return true;
         }
 
@@ -105,8 +112,19 @@ public class DrawingView extends View implements View.OnTouchListener {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         init();
-        grid.draw(canvas);
-        statusPanel.draw(canvas);
+        if(!mover.hasEnded()) {
+            grid.draw(canvas);
+            statusPanel.draw(canvas);
+        }else{
+            Paint paint = new Paint();
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(GameColor.BLACK.getColor());
+            paint.setTextSize(120);
+            paint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            canvas.drawText("TAP", width/2, height/2, paint);
+            canvas.drawText("TO", width/2, height/2+120, paint);
+            canvas.drawText("RESTART", width/2, height/2+120+120, paint);
+        }
         invalidate();
     }
 
