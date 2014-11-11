@@ -2,6 +2,7 @@ package com.pixels.blockies.app.game;
 
 import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.figures.Picker;
+import com.pixels.blockies.app.game.figures.Rotatable;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -13,7 +14,7 @@ public class BlockMover implements Runnable {
 
     Grid grid = Grid.getInstance();
     Block block = null;
-    Picker picker = new Picker();
+    Picker picker = StaticGameEnvironment.picker;
     Sage sage = new Sage();
     public void start() {
         final Runnable handling = this;
@@ -185,4 +186,5 @@ public class BlockMover implements Runnable {
         }
         return check;
     }
+
 }

@@ -21,9 +21,13 @@ public class DrawingView extends View implements View.OnTouchListener {
     boolean isInit = false;
     float histX = width / 2;
     float histY = height / 2;
-    GestureDetector gestureDetector = new GestureDetector(this.getContext(), new DoubleTapListener());
+    GridDrawable grid = GridDrawable.getInstance();
+    StatusPanelDrawable statusPanel = new StatusPanelDrawable();
+    private BlockMover mover;
 
-    private class DoubleTapListener implements GestureDetector.OnGestureListener{
+    GestureDetector gestureDetector = new GestureDetector(this.getContext(), new TapListener());
+
+    private class TapListener implements GestureDetector.OnGestureListener{
 
         @Override
         public boolean onDown(MotionEvent e) {
@@ -56,12 +60,6 @@ public class DrawingView extends View implements View.OnTouchListener {
             return false;
         }
     }
-
-    /**
-     * The needed Grid
-     */
-    GridDrawable grid = GridDrawable.getInstance();
-    private BlockMover mover;
 
     /**
      * Constructor
@@ -107,6 +105,7 @@ public class DrawingView extends View implements View.OnTouchListener {
         super.onDraw(canvas);
         init();
         grid.draw(canvas);
+        statusPanel.draw(canvas);
         invalidate();
     }
 

@@ -8,8 +8,8 @@ import java.util.Random;
  * Created by mark on 08.11.14.
  */
 public class Picker {
-    Random random = new Random();
-    Queue<Rotatable> queue = new LinkedList<Rotatable>();
+    private Random random = new Random();
+    private Queue<Rotatable> queue = new LinkedList<Rotatable>();
 
     public Picker() {
         queue.add(get());
@@ -41,12 +41,12 @@ public class Picker {
         return picked;
     }
 
-    public Rotatable pick() {
+    public synchronized Rotatable pick() {
         queue.add(get());
         return queue.poll();
     }
 
-    public Rotatable peek() {
+    public synchronized Rotatable peek() {
         return queue.peek();
     }
 
