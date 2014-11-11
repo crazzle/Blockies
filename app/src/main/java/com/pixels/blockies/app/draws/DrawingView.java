@@ -79,6 +79,7 @@ public class DrawingView extends View implements View.OnTouchListener {
             int blockHeight = (height - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.VERTICAL_BLOCK_COUNT;
             int blockWidth = (width - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
             initializeGrid(blockHeight, blockWidth);
+            statusPanel.init(blockHeight, blockWidth, width);
             isInit = true;
         }
         this.setOnTouchListener(this);

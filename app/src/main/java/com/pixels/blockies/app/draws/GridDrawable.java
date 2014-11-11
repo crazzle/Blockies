@@ -53,8 +53,9 @@ public class GridDrawable implements Drawable {
         for (int i = 0; i < blockDrawables.length; i++) {
             BlockDrawable[] line = blockDrawables[i];
             for (int j = 0; j < line.length; j++) {
-                if (logicalGrid.getPositionValue(i, j) > -1) {
-                    int blockColor = GameColor.forFigureNumber(logicalGrid.getPositionValue(i, j));
+                int color = logicalGrid.getPositionValue(i, j);
+                if (color > -1) {
+                    int blockColor = GameColor.forFigureNumber(color);
                     BlockDrawable b = new BlockDrawable(cellWidth, cellHeight, blockColor);
                     b.setX((i * cellWidth) + StaticGameEnvironment.BORDER);
                     b.setY((j * cellHeight) + StaticGameEnvironment.BORDER);

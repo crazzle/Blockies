@@ -18,7 +18,7 @@ public class BlockMover implements Runnable {
     Sage sage = new Sage();
     public void start() {
         final Runnable handling = this;
-        scheduler.scheduleAtFixedRate(handling, 0, 1000, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(handling, 0, 500, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -44,6 +44,7 @@ public class BlockMover implements Runnable {
                 List<Integer> completed = sage.checkForCompleteLines();
                 if(completed.size() > 0) {
                     grid.shiftRemoveCompleted(completed);
+                    GameInformation.addToScore(completed.size());
                 }
             }
         }

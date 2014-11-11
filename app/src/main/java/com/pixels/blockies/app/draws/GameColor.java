@@ -13,7 +13,9 @@ public enum GameColor {
     RED(210, 77, 87),
     PINK(224, 130, 131),
     BLUE(52, 152, 219),
-    WHITE(228, 241, 254);
+    WHITE(228, 241, 254),
+    GRAY(108,122,137),
+    BLACK(34,49,63);
 
     private int color;
 
