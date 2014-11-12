@@ -8,6 +8,6 @@ import com.pixels.blockies.app.game.figures.Picker;
 public class StaticGameEnvironment {
     public static final int HORIZONTAL_BLOCK_COUNT = 10;
     public static final int VERTICAL_BLOCK_COUNT = 20;
-    public static final int BORDER = 25;
+    public static int BORDER = 25;
     public static Picker picker = new Picker();
 }

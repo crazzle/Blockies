@@ -19,8 +19,14 @@ public class DrawingView extends View implements View.OnTouchListener {
     /**
      * Technical Variables
      */
-    int width = -1;
-    int height = -1;
+    float baseWidth = 1080;
+    float baseHeight = 1920;
+    int baseStrokeThickness = 10;
+    int baseBorder = 25;
+
+    int thickness = -1;
+    float width = -1;
+    float height = -1;
     boolean isInit = false;
     float histX = width / 2;
     float histY = height / 2;
@@ -83,10 +89,15 @@ public class DrawingView extends View implements View.OnTouchListener {
      */
     public void init() {
         if (!isInit) {
-            int blockHeight = (height - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.VERTICAL_BLOCK_COUNT;
-            int blockWidth = (width - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
+            float factor = ((width/baseWidth)+(height/baseHeight))/2;
+            thickness = (int) (factor*baseStrokeThickness);
+            StaticGameEnvironment.BORDER = (int) (factor*baseBorder);
+            System.out.println("b: "+StaticGameEnvironment.BORDER);
+            int blockHeight = (int) (height - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.VERTICAL_BLOCK_COUNT;
+            int blockWidth =  (int) (width - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
             initializeGrid(blockHeight, blockWidth);
-            statusPanel.init(blockHeight, blockWidth, width);
+            statusPanel.setStrokeThickness(thickness);
+            statusPanel.init(blockHeight, blockWidth, (int) width);
             isInit = true;
         }
         this.setOnTouchListener(this);
@@ -99,6 +110,7 @@ public class DrawingView extends View implements View.OnTouchListener {
      * @param blockWidth
      */
     private void initializeGrid(int blockHeight, int blockWidth) {
+        grid.setThickness(thickness);
         grid.setCellHeight(blockHeight);
         grid.setCellWidth(blockWidth);
     }
@@ -154,7 +166,7 @@ public class DrawingView extends View implements View.OnTouchListener {
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (isInit && mover != null) {
             this.gestureDetector.onTouchEvent(motionEvent);
-            int step = width / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
+            int step = (int) width / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 histX = motionEvent.getX();
                 histY = motionEvent.getY();

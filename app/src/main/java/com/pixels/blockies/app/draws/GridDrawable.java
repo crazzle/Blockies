@@ -25,6 +25,7 @@ public class GridDrawable implements Drawable {
      */
     BlockDrawable[][] blockDrawables = new BlockDrawable[StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT][StaticGameEnvironment.VERTICAL_BLOCK_COUNT];
     Grid logicalGrid = Grid.getInstance();
+    private int thickness;
 
     private GridDrawable() {
 
@@ -59,6 +60,7 @@ public class GridDrawable implements Drawable {
                     BlockDrawable b = new BlockDrawable(cellWidth, cellHeight, blockColor);
                     b.setX((i * cellWidth) + StaticGameEnvironment.BORDER);
                     b.setY((j * cellHeight) + StaticGameEnvironment.BORDER);
+                    b.setThickness(thickness);
                     line[j] = b;
                 } else {
                     line[j] = null;
@@ -73,5 +75,9 @@ public class GridDrawable implements Drawable {
 
     public void setCellWidth(int cellWidth) {
         this.cellWidth = cellWidth;
+    }
+
+    public void setThickness(int thickness) {
+        this.thickness = thickness;
     }
 }

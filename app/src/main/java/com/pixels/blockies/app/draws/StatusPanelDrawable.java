@@ -12,7 +12,6 @@ import com.pixels.blockies.app.game.figures.Rotatable;
 public class StatusPanelDrawable implements Drawable {
 
     public static final int MINI_BLOCK_FACTOR = 2;
-    public static final int STROKE_THICKNESS = 10;
 
     private Paint paint = new Paint();
     private FigurePreview preview = new FigurePreview();
@@ -23,6 +22,7 @@ public class StatusPanelDrawable implements Drawable {
     private int blockWidth = -1;
     private int blockStroke = -1;
     private int maxWidth = -1;
+    private int strokeThickness = 10;
 
 
     @Override
@@ -34,9 +34,13 @@ public class StatusPanelDrawable implements Drawable {
     public void init(int blockHeight, int blockWidth, int maxWidth){
         this.blockHeight = blockHeight/MINI_BLOCK_FACTOR;
         this.blockWidth = blockWidth/MINI_BLOCK_FACTOR;
-        this.blockStroke = STROKE_THICKNESS / MINI_BLOCK_FACTOR;
+        this.blockStroke = strokeThickness / MINI_BLOCK_FACTOR;
         this.maxWidth = maxWidth;
         this.xEnd = (maxWidth-StaticGameEnvironment.BORDER);
+    }
+
+    public void setStrokeThickness(int thickness){
+        this.strokeThickness = thickness;
     }
 
     class FigurePreview implements Drawable {
@@ -63,6 +67,7 @@ public class StatusPanelDrawable implements Drawable {
     class Score implements Drawable {
         public void draw(Canvas canvas) {
             int score = GameInformation.getScore();
+            int adjustment = 2;
 
             int oneth = score%10;
 
@@ -76,29 +81,29 @@ public class StatusPanelDrawable implements Drawable {
 
             if(hundredth > 0) {
                 boolean[][] modelHundreth = Number.forNumber(hundredth).getNumber();
-                drawModel(canvas, modelHundreth, gap);
-                gap += (Number.COLUMN_COUNT + 1) * blockWidth/2;
+                drawModel(canvas, modelHundreth, gap, adjustment);
+                gap += (Number.COLUMN_COUNT + 1) * blockWidth/adjustment;
             }
 
             if(tenth > 0) {
                 boolean[][] modelTenth = Number.forNumber(tenth).getNumber();
-                drawModel(canvas, modelTenth, gap);
-                gap += (Number.COLUMN_COUNT + 1) * blockWidth/2;
+                drawModel(canvas, modelTenth, gap, adjustment);
+                gap += (Number.COLUMN_COUNT + 1) * blockWidth/adjustment;
             }
 
             boolean[][] modelOneth = Number.forNumber(oneth).getNumber();
-            drawModel(canvas, modelOneth, gap);
+            drawModel(canvas, modelOneth, gap, adjustment);
         }
 
-        private void drawModel(Canvas canvas, boolean[][] model, int startX){
+        private void drawModel(Canvas canvas, boolean[][] model, int startX, int adjustment){
             for (int i = 0; i < model.length; i++) {
                 for (int j = 0; j < model[i].length; j++) {
                     if(model[i][j]) {
-                        int blockY = (i * (blockHeight / 2)) + StaticGameEnvironment.BORDER;
-                        int blockX = (j * (blockWidth / 2)) + StaticGameEnvironment.BORDER + startX;
-                        AdjustableMiniBlock b = new AdjustableMiniBlock(blockX,blockY, 2);
+                        int blockY = (i * (blockHeight / adjustment)) + StaticGameEnvironment.BORDER;
+                        int blockX = (j * (blockWidth / adjustment)) + StaticGameEnvironment.BORDER + startX;
+                        AdjustableMiniBlock b = new AdjustableMiniBlock(blockX,blockY, adjustment);
                         b.setSpecificColor(GameColor.ORANGE.getColor());
-                        b.setSpecificBlockStroke(blockStroke/2);
+                        b.setSpecificBlockStroke(blockStroke/adjustment);
                         b.draw(canvas);
                     }
                 }
@@ -111,7 +116,7 @@ public class StatusPanelDrawable implements Drawable {
         private int y = 0;
         private int specificColor = -1;
         private int specificBlockStroke = -1;
-        private float adjustment = -1;
+        private int adjustment = -1;
 
         public AdjustableMiniBlock(int x, int y){
             this.x = x;
@@ -119,7 +124,7 @@ public class StatusPanelDrawable implements Drawable {
             this.adjustment = 1;
         }
 
-        public AdjustableMiniBlock(int x, int y, float adjustment){
+        public AdjustableMiniBlock(int x, int y, int adjustment){
             this.x = x;
             this.y = y;
             this.adjustment = adjustment;

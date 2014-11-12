@@ -13,6 +13,7 @@ public class BlockDrawable implements Drawable {
     private int x = -1;
     private int y = -1;
     private int specificColor = -1;
+    private int thickness;
 
     public BlockDrawable(int width, int height, int specificColor) {
         this.width = width;
@@ -28,7 +29,7 @@ public class BlockDrawable implements Drawable {
     }
 
     public void drawStroke(Canvas canvas){
-        paint.setStrokeWidth(10);
+        paint.setStrokeWidth(thickness);
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(GameColor.WHITE.getColor());
         canvas.drawRect(x, y, x + width, y + height, paint);
@@ -46,4 +47,7 @@ public class BlockDrawable implements Drawable {
         this.y = y;
     }
 
+    public void setThickness(int thickness) {
+        this.thickness = thickness;
+    }
 }
