@@ -113,8 +113,8 @@ public class DrawingView extends View implements View.OnTouchListener {
         super.onDraw(canvas);
         init();
         if(!mover.hasEnded()) {
-            grid.draw(canvas);
             statusPanel.draw(canvas);
+            grid.draw(canvas);
         }else{
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.FILL);

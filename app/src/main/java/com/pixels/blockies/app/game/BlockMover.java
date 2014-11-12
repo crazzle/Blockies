@@ -158,22 +158,6 @@ public class BlockMover implements Runnable {
         this.block = null;
     }
 
-    public synchronized int getCurrentX() {
-        if (isBlockInGame()) {
-            return this.block.getX() + block.getOffsetX() / 2;
-        } else {
-            return 0;
-        }
-    }
-
-    public synchronized int getCurrentY() {
-        if (isBlockInGame()) {
-            return this.block.getY() + block.getOffsetY() / 2;
-        } else {
-            return 0;
-        }
-    }
-
     public synchronized void rotate() {
         if (isBlockInGame()) {
             removeOldPosition();
