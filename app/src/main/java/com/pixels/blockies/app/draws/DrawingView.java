@@ -32,6 +32,7 @@ public class DrawingView extends View implements View.OnTouchListener {
     float histY = height / 2;
     GridDrawable grid = GridDrawable.getInstance();
     StatusPanelDrawable statusPanel = new StatusPanelDrawable();
+    RestartScreenDrawable restart = new RestartScreenDrawable();
     private BlockMover mover;
 
     GestureDetector gestureDetector = new GestureDetector(this.getContext(), new TapListener());
@@ -98,6 +99,8 @@ public class DrawingView extends View implements View.OnTouchListener {
             initializeGrid(blockHeight, blockWidth);
             statusPanel.setStrokeThickness(thickness);
             statusPanel.init(blockHeight, blockWidth, (int) width);
+            restart.setStrokeThickness(thickness);
+            restart.init(blockHeight, blockWidth, (int) width, (int) height);
             isInit = true;
         }
         this.setOnTouchListener(this);
@@ -124,18 +127,11 @@ public class DrawingView extends View implements View.OnTouchListener {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         init();
+        statusPanel.draw(canvas);
         if(!mover.hasEnded()) {
-            statusPanel.draw(canvas);
             grid.draw(canvas);
         }else{
-            Paint paint = new Paint();
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(GameColor.BLACK.getColor());
-            paint.setTextSize(120);
-            paint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-            canvas.drawText("TAP", width/2, height/2, paint);
-            canvas.drawText("TO", width/2, height/2+120, paint);
-            canvas.drawText("RESTART", width/2, height/2+120+120, paint);
+            restart.draw(canvas);
         }
         invalidate();
     }
