@@ -1,8 +1,5 @@
-package com.pixels.blockies.app.draws;
+package com.pixels.blockies.app.draws.enums;
 
-/**
- * Created by mark on 12.11.14.
- */
 public enum Number {
     ZERO(new boolean[][]{
             {true, true, true},

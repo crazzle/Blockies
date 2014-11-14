@@ -2,27 +2,20 @@ package com.pixels.blockies.app.draws;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import com.pixels.blockies.app.environment.StaticGameEnvironment;
+import com.pixels.blockies.app.draws.enums.GameColor;
+import com.pixels.blockies.app.game.GameContext;
 import com.pixels.blockies.app.game.BlockMover;
-import com.pixels.blockies.app.game.GameInformation;
 
-/**
- * Created by keinmark on 08.03.14.
- */
 public class DrawingView extends View implements View.OnTouchListener {
 
-    /**
-     * Technical Variables
-     */
     float baseWidth = 1080;
     float baseHeight = 1920;
     int baseStrokeThickness = 10;
     int baseBorder = 25;
+    static int border = -1;
 
     int thickness = -1;
     float width = -1;
@@ -34,6 +27,7 @@ public class DrawingView extends View implements View.OnTouchListener {
     StatusPanelDrawable statusPanel = new StatusPanelDrawable();
     RestartScreenDrawable restart = new RestartScreenDrawable();
     private BlockMover mover;
+    int step = -1;
 
     GestureDetector gestureDetector = new GestureDetector(this.getContext(), new TapListener());
 
@@ -92,15 +86,15 @@ public class DrawingView extends View implements View.OnTouchListener {
         if (!isInit) {
             float factor = ((width/baseWidth)+(height/baseHeight))/2;
             thickness = (int) (factor*baseStrokeThickness);
-            StaticGameEnvironment.BORDER = (int) (factor*baseBorder);
-            System.out.println("b: "+StaticGameEnvironment.BORDER);
-            int blockHeight = (int) (height - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.VERTICAL_BLOCK_COUNT;
-            int blockWidth =  (int) (width - 2 * StaticGameEnvironment.BORDER) / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
+            border = (int) (factor*baseBorder);
+            int blockHeight = (int) (height - 2 * border) / GameContext.VERTICAL_BLOCK_COUNT;
+            int blockWidth =  (int) (width - 2 * border) / GameContext.HORIZONTAL_BLOCK_COUNT;
             initializeGrid(blockHeight, blockWidth);
             statusPanel.setStrokeThickness(thickness);
             statusPanel.init(blockHeight, blockWidth, (int) width);
             restart.setStrokeThickness(thickness);
             restart.init(blockHeight, blockWidth, (int) width, (int) height);
+            step = (int) width / GameContext.HORIZONTAL_BLOCK_COUNT;
             isInit = true;
         }
         this.setOnTouchListener(this);
@@ -162,33 +156,44 @@ public class DrawingView extends View implements View.OnTouchListener {
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (isInit && mover != null) {
             this.gestureDetector.onTouchEvent(motionEvent);
-            int step = (int) width / StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT;
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 histX = motionEvent.getX();
                 histY = motionEvent.getY();
             } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                float x = motionEvent.getX();
-                float deltaX = x - histX;
-                if (Math.abs(deltaX) > step/1.25) {
-                    histX = x;
-                    int direction = deltaX < 0 ? -1 : 1;
-                    mover.moveHorizontalPosition(direction);
-                }
-                float y = motionEvent.getY();
-                float deltaY = y - histY;
-                if (Math.abs(deltaY) > step / 1.5) {
-                    histY = y;
-                    if (deltaY > 0) {
-                        mover.moveBlockDown();
-                    }
-                }
+                moveHorizontal(motionEvent, step);
+                moveVertical(motionEvent, step);
             }
         }
         return true;
     }
 
+    private void moveVertical(MotionEvent motionEvent, int step) {
+        float y = motionEvent.getY();
+        float deltaY = y - histY;
+        if (Math.abs(deltaY) > step / 1.5) {
+            histY = y;
+            if (deltaY > 0) {
+                mover.moveBlockDown();
+            }
+        }
+    }
+
+    private void moveHorizontal(MotionEvent motionEvent, int step) {
+        float x = motionEvent.getX();
+        float deltaX = x - histX;
+        if (Math.abs(deltaX) > step/1.25) {
+            histX = x;
+            int direction = deltaX < 0 ? -1 : 1;
+            mover.moveHorizontalPosition(direction);
+        }
+    }
+
     public void setBlockMover(BlockMover mover) {
         this.mover = mover;
+    }
+
+    public static int getBorder(){
+        return border;
     }
 
 }

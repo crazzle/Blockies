@@ -2,9 +2,6 @@ package com.pixels.blockies.app.game;
 
 import com.pixels.blockies.app.game.figures.Rotatable;
 
-/**
- * Created by keinhoerster on 3/18/14.
- */
 public class Block {
     int x = -1;
     int y = -1;

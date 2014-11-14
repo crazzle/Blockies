@@ -1,18 +1,12 @@
 package com.pixels.blockies.app.game;
 
-import com.pixels.blockies.app.environment.StaticGameEnvironment;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by keinhoerster on 3/17/14.
- */
 public class Grid {
     private static Grid grid = null;
 
-    private int[][] logicalGrid = new int[StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT][StaticGameEnvironment.VERTICAL_BLOCK_COUNT];
+    private int[][] logicalGrid = new int[GameContext.HORIZONTAL_BLOCK_COUNT][GameContext.VERTICAL_BLOCK_COUNT];
 
     private Grid() {
         initLogicalGrid();
@@ -54,11 +48,11 @@ public class Grid {
                 }
                 columnAsList.remove(index);
                 columnAsList.add(0, -1);
-                int[] strippedColumn = new int[StaticGameEnvironment.VERTICAL_BLOCK_COUNT];
+                int[] strippedColumn = new int[GameContext.VERTICAL_BLOCK_COUNT];
                 for(int i = strippedColumn.length-1; i >= 0; i--){
                     strippedColumn[i] = columnAsList.get(i);
                 }
-                System.arraycopy(strippedColumn, 0, column, 0, StaticGameEnvironment.VERTICAL_BLOCK_COUNT);
+                System.arraycopy(strippedColumn, 0, column, 0, GameContext.VERTICAL_BLOCK_COUNT);
             }
         }
     }

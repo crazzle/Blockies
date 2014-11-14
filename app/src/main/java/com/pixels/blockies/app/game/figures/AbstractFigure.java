@@ -1,8 +1,5 @@
 package com.pixels.blockies.app.game.figures;
 
-/**
- * Created by mark on 02.11.14.
- */
 public abstract class AbstractFigure implements Rotatable {
     private int currentRotation = 0;
 

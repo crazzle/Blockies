@@ -1,8 +1,6 @@
 package com.pixels.blockies.app.game;
 
-import com.pixels.blockies.app.environment.StaticGameEnvironment;
 import com.pixels.blockies.app.game.figures.Picker;
-import com.pixels.blockies.app.game.figures.Rotatable;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -14,7 +12,7 @@ public class BlockMover implements Runnable {
 
     Grid grid = Grid.getInstance();
     Block block = null;
-    Picker picker = StaticGameEnvironment.picker;
+    Picker picker = GameContext.PICKER;
     Sage sage = new Sage();
     boolean lost = false;
 
@@ -49,7 +47,7 @@ public class BlockMover implements Runnable {
                 List<Integer> completed = sage.checkForCompleteLines();
                 if(completed.size() > 0) {
                     grid.shiftRemoveCompleted(completed);
-                    GameInformation.addToScore(completed.size());
+                    GameContext.addToScore(completed.size());
                 }
             }
         }
@@ -72,7 +70,7 @@ public class BlockMover implements Runnable {
     private void addNewPosition() {
         for (int i = 0; i < block.getOffsetX(); i++) {
             for (int j = 0; j < block.getOffsetY(); j++) {
-                if (block.getY() + j < StaticGameEnvironment.VERTICAL_BLOCK_COUNT) {
+                if (block.getY() + j < GameContext.VERTICAL_BLOCK_COUNT) {
                     if (block.getInner(i, j) != -1) {
                         grid.add(block.getX() + i, block.getY() + j, block.getInner(i, j));
                     }
@@ -95,7 +93,7 @@ public class BlockMover implements Runnable {
         boolean check = false;
         if (block.getX() + offset < 0) {
             check = true;
-        } else if (block.getX() + offset + block.getOffsetX() > StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT) {
+        } else if (block.getX() + offset + block.getOffsetX() > GameContext.HORIZONTAL_BLOCK_COUNT) {
             check = true;
         } else {
             for (int i = 0; i < block.getOffsetX(); i++) {
@@ -125,7 +123,7 @@ public class BlockMover implements Runnable {
     public synchronized boolean putNewBlockInGame() {
         Block b = new Block(picker.pick());
         b.setY(0);
-        b.setX(StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT / 2);
+        b.setX(GameContext.HORIZONTAL_BLOCK_COUNT / 2);
         boolean check = true;
         for (int i = 0; i < b.getOffsetX(); i++) {
             for (int j = 0; j < b.getOffsetY(); j++) {
@@ -148,7 +146,7 @@ public class BlockMover implements Runnable {
 
     private boolean isGroundReachedOnNext() {
         boolean check = false;
-        if ((block.getY() + block.getOffsetY()) >= StaticGameEnvironment.VERTICAL_BLOCK_COUNT) {
+        if ((block.getY() + block.getOffsetY()) >= GameContext.VERTICAL_BLOCK_COUNT) {
             check = true;
         }
         return check;
@@ -172,9 +170,9 @@ public class BlockMover implements Runnable {
         boolean check = true;
         if (block.getX() + block.getRotatedOffsetX() < 0) {
             check = false;
-        } else if (block.getX() + block.getRotatedOffsetX() > StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT) {
+        } else if (block.getX() + block.getRotatedOffsetX() > GameContext.HORIZONTAL_BLOCK_COUNT) {
             check = false;
-        } else if (block.getY() + block.getRotatedOffsetY() > StaticGameEnvironment.VERTICAL_BLOCK_COUNT) {
+        } else if (block.getY() + block.getRotatedOffsetY() > GameContext.VERTICAL_BLOCK_COUNT) {
             check = false;
         } else {
             for (int i = 0; i < block.getRotatedOffsetX(); i++) {
@@ -196,7 +194,7 @@ public class BlockMover implements Runnable {
 
     public synchronized void restart() {
         grid.initLogicalGrid();
-        GameInformation.reset();
+        GameContext.reset();
         lost = false;
     }
 }

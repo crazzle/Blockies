@@ -4,9 +4,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
-/**
- * Created by mark on 08.11.14.
- */
 public class Picker {
     private Random random = new Random();
     private Queue<Rotatable> queue = new LinkedList<Rotatable>();

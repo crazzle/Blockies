@@ -1,18 +1,12 @@
 package com.pixels.blockies.app.draws;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import com.pixels.blockies.app.environment.StaticGameEnvironment;
+import com.pixels.blockies.app.draws.api.Drawable;
+import com.pixels.blockies.app.draws.enums.GameColor;
+import com.pixels.blockies.app.game.GameContext;
 import com.pixels.blockies.app.game.Grid;
 
-/**
- * Created by keinhoerster on 3/17/14.
- */
 public class GridDrawable implements Drawable {
-    /**
-     * Define Layout-Values
-     */
-    public static final int STROKE = 3;
     /**
      * Singleton instance
      */
@@ -20,10 +14,8 @@ public class GridDrawable implements Drawable {
     int cellHeight = -1;
     int cellWidth = -1;
 
-    /**
-     * Drawing related
-     */
-    BlockDrawable[][] blockDrawables = new BlockDrawable[StaticGameEnvironment.HORIZONTAL_BLOCK_COUNT][StaticGameEnvironment.VERTICAL_BLOCK_COUNT];
+    BlockDrawable[][] blockDrawables =
+            new BlockDrawable[GameContext.HORIZONTAL_BLOCK_COUNT][GameContext.VERTICAL_BLOCK_COUNT];
     Grid logicalGrid = Grid.getInstance();
     private int thickness;
 
@@ -57,10 +49,11 @@ public class GridDrawable implements Drawable {
                 int color = logicalGrid.getPositionValue(i, j);
                 if (color > -1) {
                     int blockColor = GameColor.forFigureNumber(color);
-                    BlockDrawable b = new BlockDrawable(cellWidth, cellHeight, blockColor);
-                    b.setX((i * cellWidth) + StaticGameEnvironment.BORDER);
-                    b.setY((j * cellHeight) + StaticGameEnvironment.BORDER);
-                    b.setThickness(thickness);
+                    int blockX = (i * cellWidth) + DrawingView.getBorder();
+                    int blockY = (j * cellHeight) + DrawingView.getBorder();
+                    BlockDrawable b = new BlockDrawable(blockX, blockY, cellWidth, cellHeight);
+                    b.setSpecificColor(blockColor);
+                    b.setSpecificBlockStroke(thickness);
                     line[j] = b;
                 } else {
                     line[j] = null;

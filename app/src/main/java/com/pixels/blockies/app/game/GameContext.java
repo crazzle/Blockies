@@ -1,13 +1,12 @@
 package com.pixels.blockies.app.game;
 
-import com.pixels.blockies.app.environment.StaticGameEnvironment;
-import com.pixels.blockies.app.game.BlockMover;
 import com.pixels.blockies.app.game.figures.Picker;
 
-/**
- * Created by mark on 11.11.14.
- */
-public class GameInformation {
+public class GameContext {
+    public static final int HORIZONTAL_BLOCK_COUNT = 10;
+    public static final int VERTICAL_BLOCK_COUNT = 20;
+    public static final Picker PICKER = new Picker();
+
     private static int score = 0;
 
     public static synchronized void addToScore(int count){
@@ -21,5 +20,4 @@ public class GameInformation {
     public static synchronized void reset(){
         score = 0;
     }
-
 }

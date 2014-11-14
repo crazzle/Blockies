@@ -1,10 +1,7 @@
-package com.pixels.blockies.app.draws;
+package com.pixels.blockies.app.draws.enums;
 
 import android.graphics.Color;
 
-/**
- * Created by mark on 09.11.14.
- */
 public enum GameColor {
     GREEN(104, 195, 163),
     PURPLE(155, 89, 182),
