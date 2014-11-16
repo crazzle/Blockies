@@ -2,6 +2,8 @@ package com.pixels.blockies.app.game;
 
 import com.pixels.blockies.app.game.figures.Picker;
 
+import java.util.logging.Logger;
+
 /**
  * The GameContext holds the current games state as well
  * as game specific information
@@ -33,5 +35,19 @@ public class GameContext {
 
     public static synchronized void reset(){
         score = 0;
+    }
+
+    public static final int NEXT_LEVEL_COUNT = 5;
+
+    private static int linesForLevel = 0;
+
+    public static synchronized boolean promoteLineForNextLevel(int count){
+        boolean levelUp = false;
+        linesForLevel+=count;
+        if(linesForLevel >= NEXT_LEVEL_COUNT){
+            linesForLevel-=NEXT_LEVEL_COUNT;
+            levelUp = true;
+        }
+        return levelUp;
     }
 }

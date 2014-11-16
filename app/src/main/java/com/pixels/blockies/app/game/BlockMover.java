@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 /**
  * The core component of the game, responsible for moving the blocks around
@@ -45,6 +46,22 @@ public class BlockMover implements Runnable {
      */
     private boolean lost = false;
 
+    /**
+     * the current interval of the schedule
+     */
+    private int interval = 750;
+
+    /**
+     * difference that the interval will be reduced
+     * on next level
+     */
+    private final int INTERVAL_DIFF = 24; // 25 Levels
+
+    /**
+     * the minimum playable interval
+     */
+    private final static int MIN_INTERVAL = 150;
+
     public BlockMover(){
         putNewBlockInGame();
     }
@@ -54,7 +71,7 @@ public class BlockMover implements Runnable {
      * for every X seconds
      */
     public void start() {
-        schedule = createNewSchedule(this);
+        createNewSchedule(this, interval);
     }
 
     @Override
@@ -99,6 +116,13 @@ public class BlockMover implements Runnable {
                 if(completed.size() > 0) {
                     grid.shiftRemoveCompleted(completed);
                     GameContext.addToScore(completed.size());
+                    boolean nextLevel = GameContext.promoteLineForNextLevel(completed.size());
+                    if(nextLevel){
+                        if(interval-INTERVAL_DIFF > 150) {
+                            interval -= INTERVAL_DIFF;
+                            createNewSchedule(this, interval);
+                        }
+                    }
                 }
             }
         }
@@ -296,17 +320,27 @@ public class BlockMover implements Runnable {
         lost = false;
     }
 
+    /**
+     * Pauses the game by canceling the current schedule
+     */
     public void pauseMoving() {
         schedule.cancel(false);
     }
 
+    /**
+     * resumes the game by creating a new schedule
+     */
     public void resumeMoving() {
-        if(schedule.isCancelled() || schedule.isDone()){
-            schedule = createNewSchedule(this);
-        }
+        createNewSchedule(this, interval);
     }
 
-    private ScheduledFuture<?> createNewSchedule(Runnable handling) {
-        return scheduler.scheduleAtFixedRate(handling, 0, 750, TimeUnit.MILLISECONDS);
+    /**
+     * Creates a new schedule
+     */
+    private void createNewSchedule(Runnable handling, int interval) {
+        if(schedule != null) {
+            schedule.cancel(true);
+        }
+        schedule = scheduler.scheduleAtFixedRate(handling, 0, interval, TimeUnit.MILLISECONDS);
     }
 }
