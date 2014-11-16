@@ -13,7 +13,7 @@ public class Picker {
     }
 
     private Rotatable get() {
-        int num = random.nextInt(6);
+        int num = random.nextInt(7);
         Rotatable picked = null;
         switch (num) {
             case 0:
@@ -32,6 +32,9 @@ public class Picker {
                 picked = new FigureZ();
                 break;
             case 5:
+                picked = new FigureZRevert();
+                break;
+            case 6:
                 picked = new FigureO();
                 break;
         }

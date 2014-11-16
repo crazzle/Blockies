@@ -7,15 +7,12 @@ import com.pixels.blockies.app.game.GameContext;
 import com.pixels.blockies.app.game.Grid;
 
 public class GridDrawable implements Drawable {
-    /**
-     * Singleton instance
-     */
+
     private static GridDrawable grid = null;
+    BlockDrawable[][] blockDrawables = new BlockDrawable[GameContext.HORIZONTAL_BLOCK_COUNT][GameContext.VERTICAL_BLOCK_COUNT];
+    Grid logicalGrid = Grid.getInstance();
 
     ViewContext context = null;
-    BlockDrawable[][] blockDrawables =
-            new BlockDrawable[GameContext.HORIZONTAL_BLOCK_COUNT][GameContext.VERTICAL_BLOCK_COUNT];
-    Grid logicalGrid = Grid.getInstance();
 
     private GridDrawable() {
        context = DrawingView.getViewContext();

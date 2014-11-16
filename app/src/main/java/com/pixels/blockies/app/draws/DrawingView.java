@@ -43,21 +43,59 @@ public class DrawingView extends View implements View.OnTouchListener {
      */
     private static ViewContext viewContext;
 
+    /**
+     * The maximum width of the device
+     */
     private float width = -1;
+
+    /**
+     * The maximum height of the device
+     */
     private float height = -1;
-    private boolean isInit = false;
-    private float histX = width / 2;
-    private float histY = height / 2;
-    private int step = -1;
 
+    /**
+     * The x-coordinate when the finger starts
+     * touching the screen
+     */
+    private float histX = -1;
 
-    GridDrawable grid = GridDrawable.getInstance();
-    StatusPanelDrawable statusPanel = null;
-    RestartScreenDrawable restart = null;
+    /**
+     * The y-coordinate when the finger starts
+     * touching the screen
+     */
+    private float histY = -1;
+
+    /**
+     * Drawable that draws the grid according
+     * to its content
+     */
+    private GridDrawable grid = null;
+
+    /**
+     * Drawable that draws the Status-Panel
+     */
+    private StatusPanelDrawable statusPanel = null;
+
+    /**
+     * Drawable that draws the Restart-Screen
+     */
+    private RestartScreenDrawable restart = null;
+
+    /**
+     * The BlockMover acts as the overall game logic.
+     * All inputs are translated to specific commands
+     * for the blockmover in order to react to the inputs
+     */
     private BlockMover mover;
 
-    GestureDetector gestureDetector = new GestureDetector(this.getContext(), new TapListener());
+    /**
+     * Recognizes taps to rotate the current figure
+     */
+    private GestureDetector gestureDetector = new GestureDetector(this.getContext(), new TapListener());
 
+    /**
+     * Listener for the gesture detector that recognizes taps
+     */
     private class TapListener implements GestureDetector.OnGestureListener{
 
         @Override
@@ -107,53 +145,52 @@ public class DrawingView extends View implements View.OnTouchListener {
     }
 
     /**
-     * Initialize
+     * Initializes the drawing view
+     * Important: viewContext has to be build before
+     * other drawables get instantiated
      */
     public void init() {
-        if (!isInit) {
-            float factor = ((width/baseWidth)+(height/baseHeight))/2;
-            step = (int) width / GameContext.HORIZONTAL_BLOCK_COUNT;
-
-            viewContext = new ViewContext();
-            int border = (int) (factor*baseBorder);
-            viewContext.setBorder(border);
-            int strokeThickness = (int) (factor*baseStrokeThickness);
-            viewContext.setStrokeThickness(strokeThickness);
-            viewContext.setWidth(width);
-            viewContext.setHeight(height);
-            int blockHeight = (int) (height - 2 * border) / GameContext.VERTICAL_BLOCK_COUNT;
-            int blockWidth =  (int) (width - 2 * border) / GameContext.HORIZONTAL_BLOCK_COUNT;
-            viewContext.setBlockHeight(blockHeight);
-            viewContext.setBlockWidth(blockWidth);
-
+        if (viewContext == null) {
+            buildViewContext();
+            grid = GridDrawable.getInstance();
             statusPanel = new StatusPanelDrawable();
             restart = new RestartScreenDrawable();
-
-            isInit = true;
         }
         this.setOnTouchListener(this);
     }
 
-    /**
-     * Draw
-     *
-     * @param canvas
-     */
+    private void buildViewContext() {
+        float factor = ((width/baseWidth)+(height/baseHeight))/2;
+        viewContext = new ViewContext();
+        int border = (int) (factor*baseBorder);
+        viewContext.setBorder(border);
+        int strokeThickness = (int) (factor*baseStrokeThickness);
+        viewContext.setStrokeThickness(strokeThickness);
+        viewContext.setWidth(width);
+        viewContext.setHeight(height);
+        int blockHeight = (int) (height - 2 * border) / GameContext.VERTICAL_BLOCK_COUNT;
+        int blockWidth =  (int) (width - 2 * border) / GameContext.HORIZONTAL_BLOCK_COUNT;
+        viewContext.setBlockHeight(blockHeight);
+        viewContext.setBlockWidth(blockWidth);
+    }
+
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         init();
-        statusPanel.draw(canvas);
-        if(!mover.hasEnded()) {
-            grid.draw(canvas);
-        }else{
-            restart.draw(canvas);
+        if(viewContext != null) {
+            statusPanel.draw(canvas);
+            if (!mover.hasEnded()) {
+                grid.draw(canvas);
+            } else {
+                restart.draw(canvas);
+            }
         }
         invalidate();
     }
 
     /**
-     * Get device resolution to draw perfect layout
+     * Get device resolution
      *
      * @param xNew
      * @param yNew
@@ -176,12 +213,13 @@ public class DrawingView extends View implements View.OnTouchListener {
      */
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (isInit && mover != null) {
+        if (viewContext != null && mover != null) {
             this.gestureDetector.onTouchEvent(motionEvent);
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 histX = motionEvent.getX();
                 histY = motionEvent.getY();
             } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                int step = (int) width / GameContext.HORIZONTAL_BLOCK_COUNT;
                 moveHorizontal(motionEvent, step);
                 moveVertical(motionEvent, step);
             }

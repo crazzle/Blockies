@@ -47,6 +47,7 @@ public enum Letter {
     public static final int COLUMN_COUNT = 3;
 
     private boolean[][] field;
+
     private char letter;
 
     private Letter(boolean[][] field, char letter) {

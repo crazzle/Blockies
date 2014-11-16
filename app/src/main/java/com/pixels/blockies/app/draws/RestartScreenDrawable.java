@@ -14,7 +14,6 @@ public class RestartScreenDrawable implements Drawable {
     private int blockHeight = -1;
     private int blockWidth = -1;
     private int blockStroke = -1;
-    private int strokeThickness = 10;
 
     private String TAP = "TAP";
 

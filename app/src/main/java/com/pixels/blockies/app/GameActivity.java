@@ -31,5 +31,6 @@ public class GameActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+        System.exit(0);
     }
 }

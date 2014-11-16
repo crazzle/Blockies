@@ -101,7 +101,8 @@ public class StatusPanelDrawable implements Drawable {
                         int blockY = (i * (blockHeight / adjustment)) + context.getBorder();
                         int blockX = (j * (blockWidth / adjustment)) + context.getBorder() + startX;
                         BlockDrawable b = new BlockDrawable(blockX, blockY, blockWidth, blockHeight, adjustment);
-                        b.setSpecificColor(GameColor.ORANGE.getColor());
+                        Rotatable f = GameContext.PICKER.peek();
+                        b.setSpecificColor(GameColor.BLACK.getColor());
                         b.setSpecificBlockStroke(blockStroke/adjustment);
                         b.draw(canvas);
                     }
