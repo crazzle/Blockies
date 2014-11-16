@@ -9,33 +9,37 @@ import com.pixels.blockies.app.game.figures.Rotatable;
 
 public class StatusPanelDrawable implements Drawable {
 
+    /**
+     * Factor that the blocks will be shrinked to,
+     * in comparison to the standard-block size
+     */
     public static final int MINI_BLOCK_FACTOR = 2;
+
+    /**
+     * The whole screen width is used for the preview
+     */
+    private int width = -1;
+    private int blockHeight = -1;
+    private int blockWidth = -1;
+    private int blockStroke = -1;
 
     private FigurePreview preview = new FigurePreview();
     private Score score = new Score();
 
-    private int xEnd = -1;
-    private int blockHeight = -1;
-    private int blockWidth = -1;
-    private int blockStroke = -1;
-    private int strokeThickness = 10;
+    ViewContext context = null;
 
+    public StatusPanelDrawable(){
+        context = DrawingView.getViewContext();
+        this.blockHeight = context.getBlockHeight()/MINI_BLOCK_FACTOR;
+        this.blockWidth = context.getBlockWidth()/MINI_BLOCK_FACTOR;
+        this.blockStroke = context.getThickness() / MINI_BLOCK_FACTOR;
+        this.width = (int) (context.getWidth() - context.getBorder());
+    }
 
     @Override
     public void draw(Canvas canvas) {
         preview.draw(canvas);
         score.draw(canvas);
-    }
-
-    public void init(int blockHeight, int blockWidth, int maxWidth){
-        this.blockHeight = blockHeight/MINI_BLOCK_FACTOR;
-        this.blockWidth = blockWidth/MINI_BLOCK_FACTOR;
-        this.blockStroke = strokeThickness / MINI_BLOCK_FACTOR;
-        this.xEnd = (maxWidth - DrawingView.getBorder());
-    }
-
-    public void setStrokeThickness(int thickness){
-        this.strokeThickness = thickness;
     }
 
     class FigurePreview implements Drawable {
@@ -46,8 +50,8 @@ public class StatusPanelDrawable implements Drawable {
             for (int i = 0; i < model.length; i++) {
                 for (int j = 0; j < model[i].length; j++) {
                     if (model[i][j] != -1) {
-                        int blockY = (i * blockHeight) + DrawingView.getBorder();
-                        int blockX = (j * blockWidth) + xEnd - (model[i].length * blockWidth);
+                        int blockY = (i * blockHeight) + context.getBorder();
+                        int blockX = (j * blockWidth) + width - (model[i].length * blockWidth);
                         BlockDrawable b = new BlockDrawable(blockX, blockY, blockWidth, blockHeight);
                         b.setSpecificColor(GameColor.forFigureNumber(model[i][j]));
                         b.setSpecificBlockStroke(blockStroke);
@@ -94,8 +98,8 @@ public class StatusPanelDrawable implements Drawable {
             for (int i = 0; i < model.length; i++) {
                 for (int j = 0; j < model[i].length; j++) {
                     if(model[i][j]) {
-                        int blockY = (i * (blockHeight / adjustment)) + DrawingView.getBorder();
-                        int blockX = (j * (blockWidth / adjustment)) + DrawingView.getBorder() + startX;
+                        int blockY = (i * (blockHeight / adjustment)) + context.getBorder();
+                        int blockX = (j * (blockWidth / adjustment)) + context.getBorder() + startX;
                         BlockDrawable b = new BlockDrawable(blockX, blockY, blockWidth, blockHeight, adjustment);
                         b.setSpecificColor(GameColor.ORANGE.getColor());
                         b.setSpecificBlockStroke(blockStroke/adjustment);

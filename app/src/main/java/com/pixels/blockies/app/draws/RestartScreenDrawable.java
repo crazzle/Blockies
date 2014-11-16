@@ -44,16 +44,13 @@ public class RestartScreenDrawable implements Drawable {
         }
     }
 
-    public void init(int blockHeight, int blockWidth, int maxWidth, int maxHeight){
-        this.blockHeight = (int) (blockHeight/MINI_BLOCK_FACTOR);
-        this.blockWidth = (int) (blockWidth/MINI_BLOCK_FACTOR);
-        this.blockStroke = (int) (strokeThickness / MINI_BLOCK_FACTOR);
-        this.xCenter = (maxWidth/2)-Letter.COLUMN_COUNT*2*this.blockWidth;
-        this.yCenter = (maxHeight/2)-Letter.COLUMN_COUNT*this.blockHeight;
-    }
-
-    public void setStrokeThickness(int thickness){
-        this.strokeThickness = thickness;
+    public RestartScreenDrawable(){
+        ViewContext context = DrawingView.getViewContext();
+        this.blockHeight = (int) (context.getBlockHeight()/MINI_BLOCK_FACTOR);
+        this.blockWidth = (int) (context.getBlockWidth()/MINI_BLOCK_FACTOR);
+        this.blockStroke = (int) (context.getThickness() / MINI_BLOCK_FACTOR);
+        this.xCenter = ((int) context.getWidth()/2)-Letter.COLUMN_COUNT*2*this.blockWidth;
+        this.yCenter = ((int) context.getHeight()/2)-Letter.COLUMN_COUNT*this.blockHeight;
     }
 
 }

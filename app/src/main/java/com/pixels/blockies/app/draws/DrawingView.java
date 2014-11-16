@@ -9,25 +9,52 @@ import com.pixels.blockies.app.draws.enums.GameColor;
 import com.pixels.blockies.app.game.GameContext;
 import com.pixels.blockies.app.game.BlockMover;
 
+/**
+ * The drawing view visualizes the current gamestate.
+ * Furthermore it recognizes user-actions and sends them
+ * to the game-logic to be processed.
+ */
 public class DrawingView extends View implements View.OnTouchListener {
 
+    /**
+     * To ensure the same proportion between border width and
+     * block size a 1080p resolution is defined. Different
+     * resolutions will be down-/upscaled to ensure the same
+     * ratio
+     */
     float baseWidth = 1080;
     float baseHeight = 1920;
-    int baseStrokeThickness = 10;
-    int baseBorder = 25;
-    static int border = -1;
 
-    int thickness = -1;
-    float width = -1;
-    float height = -1;
-    boolean isInit = false;
-    float histX = width / 2;
-    float histY = height / 2;
+    /**
+     * Ensure a strocke-thickness of 10 pixels on a
+     * 1080p device
+     */
+    int baseStrokeThickness = 10;
+
+    /**
+     * Ensure a border of 25 pixels on a
+     * 1080p device
+     */
+    int baseBorder = 25;
+
+    /**
+     * The ViewContext with common information
+     * about the resolution/sizes/borders
+     */
+    private static ViewContext viewContext;
+
+    private float width = -1;
+    private float height = -1;
+    private boolean isInit = false;
+    private float histX = width / 2;
+    private float histY = height / 2;
+    private int step = -1;
+
+
     GridDrawable grid = GridDrawable.getInstance();
-    StatusPanelDrawable statusPanel = new StatusPanelDrawable();
-    RestartScreenDrawable restart = new RestartScreenDrawable();
+    StatusPanelDrawable statusPanel = null;
+    RestartScreenDrawable restart = null;
     private BlockMover mover;
-    int step = -1;
 
     GestureDetector gestureDetector = new GestureDetector(this.getContext(), new TapListener());
 
@@ -85,31 +112,26 @@ public class DrawingView extends View implements View.OnTouchListener {
     public void init() {
         if (!isInit) {
             float factor = ((width/baseWidth)+(height/baseHeight))/2;
-            thickness = (int) (factor*baseStrokeThickness);
-            border = (int) (factor*baseBorder);
+            step = (int) width / GameContext.HORIZONTAL_BLOCK_COUNT;
+
+            viewContext = new ViewContext();
+            int border = (int) (factor*baseBorder);
+            viewContext.setBorder(border);
+            int strokeThickness = (int) (factor*baseStrokeThickness);
+            viewContext.setStrokeThickness(strokeThickness);
+            viewContext.setWidth(width);
+            viewContext.setHeight(height);
             int blockHeight = (int) (height - 2 * border) / GameContext.VERTICAL_BLOCK_COUNT;
             int blockWidth =  (int) (width - 2 * border) / GameContext.HORIZONTAL_BLOCK_COUNT;
-            initializeGrid(blockHeight, blockWidth);
-            statusPanel.setStrokeThickness(thickness);
-            statusPanel.init(blockHeight, blockWidth, (int) width);
-            restart.setStrokeThickness(thickness);
-            restart.init(blockHeight, blockWidth, (int) width, (int) height);
-            step = (int) width / GameContext.HORIZONTAL_BLOCK_COUNT;
+            viewContext.setBlockHeight(blockHeight);
+            viewContext.setBlockWidth(blockWidth);
+
+            statusPanel = new StatusPanelDrawable();
+            restart = new RestartScreenDrawable();
+
             isInit = true;
         }
         this.setOnTouchListener(this);
-    }
-
-    /**
-     * Initialize grid
-     *
-     * @param blockHeight
-     * @param blockWidth
-     */
-    private void initializeGrid(int blockHeight, int blockWidth) {
-        grid.setThickness(thickness);
-        grid.setCellHeight(blockHeight);
-        grid.setCellWidth(blockWidth);
     }
 
     /**
@@ -192,8 +214,8 @@ public class DrawingView extends View implements View.OnTouchListener {
         this.mover = mover;
     }
 
-    public static int getBorder(){
-        return border;
+    public static ViewContext getViewContext(){
+        return viewContext;
     }
 
 }
