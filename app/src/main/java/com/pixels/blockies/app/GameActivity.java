@@ -32,7 +32,19 @@ public class GameActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-        //System.exit(0);
         android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        mover.pauseMoving();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mover.resumeMoving();
+
     }
 }

@@ -5,6 +5,7 @@ import com.pixels.blockies.app.game.figures.Picker;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,6 +17,7 @@ public class BlockMover implements Runnable {
      * Scheduler to shift blocks based on a specific time interval
      */
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private ScheduledFuture schedule = null;
 
     /**
      * The underlying logical grid
@@ -52,8 +54,7 @@ public class BlockMover implements Runnable {
      * for every X seconds
      */
     public void start() {
-        final Runnable handling = this;
-        scheduler.scheduleAtFixedRate(handling, 0, 750, TimeUnit.MILLISECONDS);
+        schedule = createNewSchedule(this);
     }
 
     @Override
@@ -293,5 +294,19 @@ public class BlockMover implements Runnable {
         grid.initLogicalGrid();
         GameContext.reset();
         lost = false;
+    }
+
+    public void pauseMoving() {
+        schedule.cancel(false);
+    }
+
+    public void resumeMoving() {
+        if(schedule.isCancelled() || schedule.isDone()){
+            schedule = createNewSchedule(this);
+        }
+    }
+
+    private ScheduledFuture<?> createNewSchedule(Runnable handling) {
+        return scheduler.scheduleAtFixedRate(handling, 0, 750, TimeUnit.MILLISECONDS);
     }
 }
