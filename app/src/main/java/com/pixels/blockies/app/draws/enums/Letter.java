@@ -1,5 +1,9 @@
 package com.pixels.blockies.app.draws.enums;
 
+/**
+ * Enum with all letters that are
+ * drawn using blocks
+ */
 public enum Letter {
     T(new boolean[][]{
             {true, true, true},
@@ -42,7 +46,14 @@ public enum Letter {
             {true, true, true},
             {false, false, true},
             {true, true, true}
-    }, 'S');
+    }, 'S'),
+    EXCLAMATION_MARK(new boolean[][]{
+            {false, true, false},
+            {false, true, false},
+            {false, true, false},
+            {false, false, false},
+            {false, true, false}
+    }, '!');
 
     public static final int COLUMN_COUNT = 3;
 

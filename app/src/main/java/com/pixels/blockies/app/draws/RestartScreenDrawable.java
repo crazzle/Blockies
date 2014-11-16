@@ -5,9 +5,12 @@ import com.pixels.blockies.app.draws.api.Drawable;
 import com.pixels.blockies.app.draws.enums.GameColor;
 import com.pixels.blockies.app.draws.enums.Letter;
 
+/**
+ * Draws the screen that is shown after a game is over
+ */
 public class RestartScreenDrawable implements Drawable {
 
-    public static final float MINI_BLOCK_FACTOR = 1.5f;
+    public static final float MINI_BLOCK_FACTOR = 1.85f;
 
     private int xCenter = -1;
     private int yCenter = -1;
@@ -15,7 +18,7 @@ public class RestartScreenDrawable implements Drawable {
     private int blockWidth = -1;
     private int blockStroke = -1;
 
-    private String TAP = "TAP";
+    private String TAP = "TAP!";
 
 
     @Override
@@ -35,7 +38,7 @@ public class RestartScreenDrawable implements Drawable {
                     int blockY = (i * blockHeight) + yPos;
                     int blockX = (j * blockWidth) + xPos;
                     BlockDrawable b = new BlockDrawable(blockX, blockY, this.blockWidth, this.blockHeight);
-                    b.setSpecificColor(GameColor.RED.getColor());
+                    b.setSpecificColor(GameColor.BLACK.getColor());
                     b.setSpecificBlockStroke(blockStroke);
                     b.draw(canvas);
                 }
@@ -48,7 +51,7 @@ public class RestartScreenDrawable implements Drawable {
         this.blockHeight = (int) (context.getBlockHeight()/MINI_BLOCK_FACTOR);
         this.blockWidth = (int) (context.getBlockWidth()/MINI_BLOCK_FACTOR);
         this.blockStroke = (int) (context.getThickness() / MINI_BLOCK_FACTOR);
-        this.xCenter = ((int) context.getWidth()/2)-Letter.COLUMN_COUNT*2*this.blockWidth;
+        this.xCenter = ((int) context.getWidth()/2)-Letter.COLUMN_COUNT*(TAP.length()-1)*this.blockWidth;
         this.yCenter = ((int) context.getHeight()/2)-Letter.COLUMN_COUNT*this.blockHeight;
     }
 

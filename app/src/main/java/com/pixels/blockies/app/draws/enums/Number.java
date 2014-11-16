@@ -1,5 +1,9 @@
 package com.pixels.blockies.app.draws.enums;
 
+/**
+ * Enum with all numbers that are
+ * drawn using blocks
+ */
 public enum Number {
     ZERO(new boolean[][]{
             {true, true, true},

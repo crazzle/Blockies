@@ -1,7 +1,8 @@
 package com.pixels.blockies.app.draws;
 
 /**
- * Created by mark on 16.11.14.
+ * The context that holds important information
+ * in order to draw all the block correctly
  */
 public class ViewContext {
     private int border = -1;

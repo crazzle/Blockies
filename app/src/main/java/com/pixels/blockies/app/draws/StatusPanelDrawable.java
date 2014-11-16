@@ -1,12 +1,16 @@
 package com.pixels.blockies.app.draws;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import com.pixels.blockies.app.draws.api.Drawable;
 import com.pixels.blockies.app.draws.enums.GameColor;
 import com.pixels.blockies.app.draws.enums.Number;
 import com.pixels.blockies.app.game.GameContext;
 import com.pixels.blockies.app.game.figures.Rotatable;
 
+/**
+ * Draws the status panel on the top of the screen
+ */
 public class StatusPanelDrawable implements Drawable {
 
     /**
@@ -23,9 +27,15 @@ public class StatusPanelDrawable implements Drawable {
     private int blockWidth = -1;
     private int blockStroke = -1;
 
+    /**
+     * Preview and Score that are drawn on top
+     */
     private FigurePreview preview = new FigurePreview();
     private Score score = new Score();
 
+    /**
+     * ViewContext with a lot of useful information
+     */
     ViewContext context = null;
 
     public StatusPanelDrawable(){
@@ -42,9 +52,13 @@ public class StatusPanelDrawable implements Drawable {
         score.draw(canvas);
     }
 
+    /**
+     * Inner class that draws the preview on the top right corner
+     */
     class FigurePreview implements Drawable {
         @Override
         public void draw(Canvas canvas) {
+            // The the next rotatable that should be drawn
             Rotatable f = GameContext.PICKER.peek();
             int[][] model = f.get();
             for (int i = 0; i < model.length; i++) {
@@ -62,20 +76,31 @@ public class StatusPanelDrawable implements Drawable {
         }
     }
 
-
+    /**
+     * Inner class representing the score on the top left corner.
+     * The score can reach a maximum of 999 lines, after that it starts
+     * back at 0
+     */
     class Score implements Drawable {
         public void draw(Canvas canvas) {
+            // Get the current score from GameContext
             int score = GameContext.getScore();
+
+            // Factor to adjust the blocks (shrink)
             int adjustment = 2;
 
+            // get the lowest decimal digit of the score
             int oneth = score%10;
 
+            // get the middle decimal digit of the score
             score /= 10;
             int tenth = score%10;
 
+            // get the highest decimal digit of the score
             score /= 10;
             int hundredth = score;
 
+            // The gap between the digits
             int gap = 0;
 
             if(hundredth > 0) {
@@ -94,6 +119,13 @@ public class StatusPanelDrawable implements Drawable {
             drawModel(canvas, modelOneth, gap, adjustment);
         }
 
+        /**
+         * Draw each digit as a block adjusted by 2
+         * @param canvas
+         * @param model
+         * @param startX
+         * @param adjustment
+         */
         private void drawModel(Canvas canvas, boolean[][] model, int startX, int adjustment){
             for (int i = 0; i < model.length; i++) {
                 for (int j = 0; j < model[i].length; j++) {
