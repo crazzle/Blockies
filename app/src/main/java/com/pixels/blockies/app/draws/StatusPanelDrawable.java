@@ -6,6 +6,7 @@ import com.pixels.blockies.app.draws.api.Drawable;
 import com.pixels.blockies.app.draws.enums.GameColor;
 import com.pixels.blockies.app.draws.enums.Number;
 import com.pixels.blockies.app.game.GameContext;
+import com.pixels.blockies.app.game.Grid;
 import com.pixels.blockies.app.game.figures.Rotatable;
 
 /**
@@ -63,7 +64,7 @@ public class StatusPanelDrawable implements Drawable {
             int[][] model = f.get();
             for (int i = 0; i < model.length; i++) {
                 for (int j = 0; j < model[i].length; j++) {
-                    if (model[i][j] != -1) {
+                    if (model[i][j] != Grid.EMPTY) {
                         int blockY = (i * blockHeight) + context.getBorder();
                         int blockX = (j * blockWidth) + width - (model[i].length * blockWidth);
                         BlockDrawable b = new BlockDrawable(blockX, blockY, blockWidth, blockHeight);

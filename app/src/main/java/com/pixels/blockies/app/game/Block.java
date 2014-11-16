@@ -2,6 +2,10 @@ package com.pixels.blockies.app.game;
 
 import com.pixels.blockies.app.game.figures.Rotatable;
 
+/**
+ * Represents a logical block with a coordinate in the grid
+ * and a figure that can be rotated
+ */
 public class Block {
     int x = -1;
     int y = -1;

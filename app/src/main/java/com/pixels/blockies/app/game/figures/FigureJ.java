@@ -1,24 +1,26 @@
 package com.pixels.blockies.app.game.figures;
 
+import com.pixels.blockies.app.game.Grid;
+
 public class FigureJ extends AbstractFigure {
 
     private int[][][] figures = new int[][][]{
             {
-                    {1, -1, -1},
+                    {1, Grid.EMPTY, Grid.EMPTY},
                     {1, 1, 1}
             },
             {
                     {1, 1},
-                    {1, -1},
-                    {1, -1}
+                    {1, Grid.EMPTY},
+                    {1, Grid.EMPTY}
             },
             {
                     {1, 1, 1},
-                    {-1, -1, 1}
+                    {Grid.EMPTY, Grid.EMPTY, 1}
             },
             {
-                    {-1, 1},
-                    {-1, 1},
+                    {Grid.EMPTY, 1},
+                    {Grid.EMPTY, 1},
                     {1, 1}
             }
     };

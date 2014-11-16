@@ -69,9 +69,9 @@ public class GridDrawable implements Drawable {
         for (int i = 0; i < blockDrawables.length; i++) {
             BlockDrawable[] line = blockDrawables[i];
             for (int j = 0; j < line.length; j++) {
-                int color = logicalGrid.getPositionValue(i, j);
-                if (color > -1) {
-                    int blockColor = GameColor.forFigureNumber(color);
+                int fieldValue = logicalGrid.getPositionValue(i, j);
+                if (fieldValue > Grid.EMPTY) {
+                    int blockColor = GameColor.forFigureNumber(fieldValue);
                     int blockX = (i * context.getBlockWidth()) + context.getBorder();
                     int blockY = (j * context.getBlockHeight()) + context.getBorder();
                     BlockDrawable b = new BlockDrawable(blockX, blockY, context.getBlockWidth(), context.getBlockHeight());

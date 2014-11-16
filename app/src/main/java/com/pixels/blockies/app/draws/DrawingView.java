@@ -180,7 +180,7 @@ public class DrawingView extends View implements View.OnTouchListener {
         init();
         if(viewContext != null) {
             statusPanel.draw(canvas);
-            if (false && !mover.hasEnded()) {
+            if (!mover.hasEnded()) {
                 grid.draw(canvas);
             } else {
                 restart.draw(canvas);

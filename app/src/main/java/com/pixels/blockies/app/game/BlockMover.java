@@ -7,15 +7,50 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The core component of the game, responsible for moving the blocks around
+ */
 public class BlockMover implements Runnable {
+
+    /**
+     * Scheduler to shift blocks based on a specific time interval
+     */
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-    Grid grid = Grid.getInstance();
-    Block block = null;
-    Picker picker = GameContext.PICKER;
-    Sage sage = new Sage();
-    boolean lost = false;
+    /**
+     * The underlying logical grid
+     */
+    private Grid grid = Grid.getInstance();
 
+    /**
+     * The current block that is moved by the mover
+     */
+    private Block block = null;
+
+    /**
+     * Picker that picks the figure for the next block
+     */
+    private Picker picker = GameContext.PICKER;
+
+    /**
+     * The sage who is able to say if a
+     * if a line is full
+     */
+    private Sage sage = new Sage();
+
+    /**
+     * Indicates if a game is finished or not
+     */
+    private boolean lost = false;
+
+    public BlockMover(){
+        putNewBlockInGame();
+    }
+
+    /**
+     * Starts the block mover so that it moves a block
+     * for every X seconds
+     */
     public void start() {
         final Runnable handling = this;
         scheduler.scheduleAtFixedRate(handling, 0, 750, TimeUnit.MILLISECONDS);
@@ -33,15 +68,30 @@ public class BlockMover implements Runnable {
         }
     }
 
+    /**
+     * Moves a block down. As long as a block is in
+     * game it
+     * - first removes the old position
+     * - checks if the next position is valid
+     * - sets the block coordinates to the new position
+     * - adds the block again with the new position
+     *
+     * That seems like a lot of overhead, but first delete
+     * is necessary so the block is not blocked by its
+     * own inner blocks. {Nice sentence...}
+     *
+     * If the block is finished, it will be removed from
+     * the blockmover and the completed lines are counted
+     */
     public synchronized void moveBlockDown() {
         if (isBlockInGame()) {
-            removeOldPosition();
-            boolean notFinished = !isGroundReachedOnNext() && !isNextOccupied();
+            removeBlockFromGrid();
+            boolean notFinished = !isGroundReached() && !isNextOccupied();
             if(notFinished) {
                 int currentRow = block.getY();
                 block.setY(++currentRow);
             }
-            addNewPosition();
+            addBlockToGrid();
             if(!notFinished){
                 removeBlock();
                 List<Integer> completed = sage.checkForCompleteLines();
@@ -53,12 +103,15 @@ public class BlockMover implements Runnable {
         }
     }
 
+    /**
+     * Checks if the next position (vertically) of the current block is occupied
+     */
     private boolean isNextOccupied() {
         boolean check = false;
         for (int i = 0; i < block.getOffsetX(); i++) {
             for (int j = 0; j < block.getOffsetY(); j++) {
-                if (block.getInner(i, j) > -1) {
-                    if (grid.getPositionValue(i + block.getX(), j + 1 + block.getY()) > -1) {
+                if (block.getInner(i, j) > Grid.EMPTY) {
+                    if (grid.getPositionValue(i + block.getX(), j + 1 + block.getY()) > Grid.EMPTY) {
                         check = true;
                     }
                 }
@@ -67,11 +120,14 @@ public class BlockMover implements Runnable {
         return check;
     }
 
-    private void addNewPosition() {
+    /**
+     * Adds the current block to the grid
+     */
+    private void addBlockToGrid() {
         for (int i = 0; i < block.getOffsetX(); i++) {
             for (int j = 0; j < block.getOffsetY(); j++) {
                 if (block.getY() + j < GameContext.VERTICAL_BLOCK_COUNT) {
-                    if (block.getInner(i, j) != -1) {
+                    if (block.getInner(i, j) != Grid.EMPTY) {
                         grid.add(block.getX() + i, block.getY() + j, block.getInner(i, j));
                     }
                 }
@@ -79,16 +135,26 @@ public class BlockMover implements Runnable {
         }
     }
 
+    /**
+     * Moves the Block horizontally by:
+     * - removing the current position
+     * - adding the offset to the x coordinate
+     * - adding the current block with the new coordinate to the grid
+     */
     public synchronized void moveHorizontalPosition(int offset) {
         if (isBlockInGame()) {
-            removeOldPosition();
+            removeBlockFromGrid();
             if(!isHorizontalNeighborOccupied(offset)) {
                 block.setX(block.getX() + offset);
             }
-            addNewPosition();
+            addBlockToGrid();
         }
     }
 
+    /**
+     * Checks if the next position (horizontally) of the current block is occupied.
+     * The method checks also the boundaries of the grid.
+     */
     private boolean isHorizontalNeighborOccupied(int offset) {
         boolean check = false;
         if (block.getX() + offset < 0) {
@@ -99,8 +165,8 @@ public class BlockMover implements Runnable {
             for (int i = 0; i < block.getOffsetX(); i++) {
                 for (int j = 0; j < block.getOffsetY(); j++) {
                     int nextColumn = i + offset;
-                    if (block.getInner(i, j) > -1) {
-                        if (grid.getPositionValue(block.getX() + i + offset, j + block.getY()) > -1) {
+                    if (block.getInner(i, j) > Grid.EMPTY) {
+                        if (grid.getPositionValue(block.getX() + i + offset, j + block.getY()) > Grid.EMPTY) {
                             check = true;
                         }
                     }
@@ -110,16 +176,23 @@ public class BlockMover implements Runnable {
         return check;
     }
 
-    private void removeOldPosition() {
+    /**
+     * Removes the old position from the grid
+     */
+    private void removeBlockFromGrid() {
         for (int i = 0; i < block.getOffsetX(); i++) {
             for (int j = 0; j < block.getOffsetY(); j++) {
-                if (block.getInner(i, j) != -1) {
+                if (block.getInner(i, j) != Grid.EMPTY) {
                     grid.remove(block.getX() + i, block.getY() + j);
                 }
             }
         }
     }
 
+    /**
+     * Puts a new block into the game by initializing
+     * the block variable
+     */
     public synchronized boolean putNewBlockInGame() {
         Block b = new Block(picker.pick());
         b.setY(0);
@@ -127,8 +200,8 @@ public class BlockMover implements Runnable {
         boolean check = true;
         for (int i = 0; i < b.getOffsetX(); i++) {
             for (int j = 0; j < b.getOffsetY(); j++) {
-                if (b.getInner(i, j) > -1) {
-                    if (grid.getPositionValue(i + b.getX(), j + b.getY()) > -1) {
+                if (b.getInner(i, j) > Grid.EMPTY) {
+                    if (grid.getPositionValue(i + b.getX(), j + b.getY()) > Grid.EMPTY) {
                         check = false;
                     }
                 }
@@ -140,11 +213,17 @@ public class BlockMover implements Runnable {
         return check;
     }
 
+    /**
+     * Checks if a block is currently in game
+     */
     private boolean isBlockInGame() {
         return block != null;
     }
 
-    private boolean isGroundReachedOnNext() {
+    /**
+     * Checks if the ground is reached
+     */
+    private boolean isGroundReached() {
         boolean check = false;
         if ((block.getY() + block.getOffsetY()) >= GameContext.VERTICAL_BLOCK_COUNT) {
             check = true;
@@ -152,20 +231,32 @@ public class BlockMover implements Runnable {
         return check;
     }
 
+    /**
+     * Removes the current block from the game
+     */
     private void removeBlock() {
         this.block = null;
     }
 
+    /**
+     * Rotates the current block by:
+     * s removing the block from the grid
+     * - rotating the block
+     * - adding the block to the grid
+     */
     public synchronized void rotate() {
         if (isBlockInGame()) {
-            removeOldPosition();
+            removeBlockFromGrid();
             if(isRotatable()) {
                 this.block.rotate();
             }
-            addNewPosition();
+            addBlockToGrid();
         }
     }
 
+    /**
+     * Checks if a block is rotatable in its current position
+     */
     private boolean isRotatable() {
         boolean check = true;
         if (block.getX() + block.getRotatedOffsetX() < 0) {
@@ -177,8 +268,8 @@ public class BlockMover implements Runnable {
         } else {
             for (int i = 0; i < block.getRotatedOffsetX(); i++) {
                 for (int j = 0; j < block.getRotatedOffsetY(); j++) {
-                    if (block.getRotatedInner(i, j) > -1) {
-                        if (grid.getPositionValue(i + block.getX(), j + block.getY()) > -1) {
+                    if (block.getRotatedInner(i, j) > Grid.EMPTY) {
+                        if (grid.getPositionValue(i + block.getX(), j + block.getY()) > Grid.EMPTY) {
                             check = false;
                         }
                     }
@@ -188,10 +279,16 @@ public class BlockMover implements Runnable {
         return check;
     }
 
+    /**
+     * Checks if the game has ended
+     */
     public synchronized boolean hasEnded(){
         return lost;
     }
 
+    /**
+     * Restarts the game logic
+     */
     public synchronized void restart() {
         grid.initLogicalGrid();
         GameContext.reset();

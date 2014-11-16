@@ -6,7 +6,9 @@ import android.os.Bundle;
 import com.pixels.blockies.app.draws.DrawingView;
 import com.pixels.blockies.app.game.BlockMover;
 
-
+/**
+ * Entry point of the app - The GameActivity
+ */
 public class GameActivity extends Activity {
     DrawingView drawView = null;
     BlockMover mover = null;
@@ -16,7 +18,6 @@ public class GameActivity extends Activity {
         super.onCreate(savedInstanceState);
         drawView = new DrawingView(this);
         mover = new BlockMover();
-        mover.putNewBlockInGame();
         mover.start();
         drawView.setBlockMover(mover);
         setContentView(drawView);
@@ -31,6 +32,7 @@ public class GameActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-        System.exit(0);
+        //System.exit(0);
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
