@@ -55,7 +55,7 @@ public class BlockMover implements Runnable {
      * difference that the interval will be reduced
      * on next level
      */
-    private final int INTERVAL_DIFF = 24; // 25 Levels
+    private final int INTERVAL_DIFF = 20; // 30 Levels
 
     /**
      * the minimum playable interval
@@ -116,9 +116,8 @@ public class BlockMover implements Runnable {
                 if(completed.size() > 0) {
                     grid.shiftRemoveCompleted(completed);
                     GameContext.addToScore(completed.size());
-                    boolean nextLevel = GameContext.promoteLineForNextLevel(completed.size());
-                    if(nextLevel){
-                        if(interval-INTERVAL_DIFF > 150) {
+                    for(int i = 0; i < completed.size(); i++){
+                        if((interval-INTERVAL_DIFF) > MIN_INTERVAL) {
                             interval -= INTERVAL_DIFF;
                             createNewSchedule(this, interval);
                         }
