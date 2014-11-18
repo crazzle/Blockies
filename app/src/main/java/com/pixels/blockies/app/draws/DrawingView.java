@@ -241,7 +241,7 @@ public class DrawingView extends View implements View.OnTouchListener {
     private void moveHorizontal(MotionEvent motionEvent, int step) {
         float x = motionEvent.getX();
         float deltaX = x - histX;
-        if (Math.abs(deltaX) > step/1.25) {
+        if (Math.abs(deltaX) > step/1.5) {
             histX = x;
             int direction = deltaX < 0 ? -1 : 1;
             mover.moveHorizontalPosition(direction);
