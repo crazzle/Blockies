@@ -230,7 +230,7 @@ public class DrawingView extends View implements View.OnTouchListener {
     private void moveVertical(MotionEvent motionEvent, int step) {
         float y = motionEvent.getY();
         float deltaY = y - histY;
-        if (Math.abs(deltaY) > step / 1.5) {
+        if (Math.abs(deltaY) > step / 2) {
             histY = y;
             if (deltaY > 0) {
                 mover.moveBlockDown();

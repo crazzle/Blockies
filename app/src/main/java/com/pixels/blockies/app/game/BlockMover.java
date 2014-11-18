@@ -55,12 +55,17 @@ public class BlockMover implements Runnable {
      * difference that the interval will be reduced
      * on next level
      */
-    private final int INTERVAL_DIFF = 20; // 30 Levels
+    private final int INTERVAL_DIFF = 20; // 25 Levels
 
     /**
      * the minimum playable interval
      */
     private final static int MIN_INTERVAL = 150;
+
+    /**
+     * the maximum playable interval
+     */
+    private final static int MAX_INTERVAL = 750;
 
     public BlockMover(){
         putNewBlockInGame();
@@ -83,6 +88,8 @@ public class BlockMover implements Runnable {
                 boolean valid = putNewBlockInGame();
                 lost = !valid;
             }
+        }else{
+            pauseMoving();
         }
     }
 
@@ -188,7 +195,6 @@ public class BlockMover implements Runnable {
         } else {
             for (int i = 0; i < block.getOffsetX(); i++) {
                 for (int j = 0; j < block.getOffsetY(); j++) {
-                    int nextColumn = i + offset;
                     if (block.getInner(i, j) > Grid.EMPTY) {
                         if (grid.getPositionValue(block.getX() + i + offset, j + block.getY()) > Grid.EMPTY) {
                             check = true;
@@ -317,13 +323,15 @@ public class BlockMover implements Runnable {
         grid.initLogicalGrid();
         GameContext.reset();
         lost = false;
+        interval = MAX_INTERVAL;
+        createNewSchedule(this, interval);
     }
 
     /**
      * Pauses the game by canceling the current schedule
      */
     public void pauseMoving() {
-        schedule.cancel(false);
+        schedule.cancel(true);
     }
 
     /**
