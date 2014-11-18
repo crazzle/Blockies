@@ -2,7 +2,7 @@
 /local.properties
 /.idea
 .DS_Store
-.iml
+*.iml
 /build
-.apk
+*.apk
 /app/build
