@@ -3,6 +3,8 @@ package com.pixels.blockies.app;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import com.pixels.blockies.app.draws.DrawingView;
 import com.pixels.blockies.app.game.BlockMover;
 
@@ -16,6 +18,11 @@ public class GameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         drawView = new DrawingView(this);
         mover = new BlockMover();
         mover.start();
