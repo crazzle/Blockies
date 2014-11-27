@@ -1,5 +1,7 @@
 package com.pixels.blockies.app.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import com.pixels.blockies.app.game.figures.Picker;
 
 import java.util.List;
@@ -87,6 +89,9 @@ public class BlockMover implements Runnable {
             } else {
                 boolean valid = putNewBlockInGame();
                 lost = !valid;
+                if(lost){
+                    GameContext.HIGH_SCORE.saveScore(GameContext.getScore());
+                }
             }
         }else{
             pauseMoving();

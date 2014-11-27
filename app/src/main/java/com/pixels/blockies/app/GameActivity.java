@@ -2,11 +2,15 @@ package com.pixels.blockies.app;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import com.pixels.blockies.app.draws.DrawingView;
 import com.pixels.blockies.app.game.BlockMover;
+import com.pixels.blockies.app.game.GameContext;
+import com.pixels.blockies.app.game.HighScore;
 
 /**
  * Entry point of the app - The GameActivity
@@ -14,6 +18,7 @@ import com.pixels.blockies.app.game.BlockMover;
 public class GameActivity extends Activity {
     DrawingView drawView = null;
     BlockMover mover = null;
+    HighScore highScore = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +28,18 @@ public class GameActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        GameContext.HIGH_SCORE = new HighScore(getDataStore());
+
         drawView = new DrawingView(this);
         mover = new BlockMover();
         mover.start();
         drawView.setBlockMover(mover);
         setContentView(drawView);
+    }
+
+    private SharedPreferences getDataStore(){
+        SharedPreferences prefs = this.getSharedPreferences("blockiesDataStore", Context.MODE_PRIVATE);
+        return prefs;
     }
 
     @Override

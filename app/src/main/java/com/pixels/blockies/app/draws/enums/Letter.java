@@ -19,6 +19,13 @@ public enum Letter {
             {true, false, true},
             {true, false, true}
     }, 'A'),
+    B(new boolean[][]{
+            {true, true, true},
+            {true, false, true},
+            {true, true, true},
+            {true, false, true},
+            {true, true, true}
+    }, 'B'),
     P(new boolean[][]{
             {true, true, true},
             {true, false, true},
@@ -53,7 +60,21 @@ public enum Letter {
             {false, true, false},
             {false, false, false},
             {false, true, false}
-    }, '!');
+    }, '!'),
+    DOUBLE_POINT(new boolean[][]{
+            {false, false, false},
+            {false, true, false},
+            {false, false, false},
+            {false, true, false},
+            {false, false, false}
+    }, ':'),
+    DASH(new boolean[][]{
+            {false, false, false},
+            {false, false, false},
+            {true, true, true},
+            {false, false, false},
+            {false, false, false}
+    }, '-');;
 
     public static final int COLUMN_COUNT = 3;
 

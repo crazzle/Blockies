@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import com.pixels.blockies.app.draws.api.Drawable;
 import com.pixels.blockies.app.draws.enums.GameColor;
+import com.pixels.blockies.app.draws.enums.Letter;
 import com.pixels.blockies.app.draws.enums.Number;
 import com.pixels.blockies.app.game.GameContext;
 import com.pixels.blockies.app.game.Grid;
@@ -117,6 +118,41 @@ public class StatusPanelDrawable implements Drawable {
             }
 
             boolean[][] modelOneth = Number.forNumber(oneth).getNumber();
+            drawModel(canvas, modelOneth, gap, adjustment);
+            gap += (Number.COLUMN_COUNT + 1) * blockWidth/adjustment;
+
+            // slash
+            boolean[][] modelSlash = Letter.forLetter('-').getLetter();
+            drawModel(canvas, modelSlash, gap, adjustment);
+            gap += (Letter.COLUMN_COUNT + 1) * blockWidth/adjustment;
+
+            // Get the current highscore from GameContext
+            score = GameContext.HIGH_SCORE.getScore();
+
+            // get the lowest decimal digit of the score
+            oneth = score%10;
+
+            // get the middle decimal digit of the score
+            score /= 10;
+            tenth = score%10;
+
+            // get the highest decimal digit of the score
+            score /= 10;
+            hundredth = score;
+
+            if(hundredth > 0) {
+                boolean[][] modelHundreth = com.pixels.blockies.app.draws.enums.Number.forNumber(hundredth).getNumber();
+                drawModel(canvas, modelHundreth, gap, adjustment);
+                gap += (Number.COLUMN_COUNT + 1) * blockWidth/adjustment;
+            }
+
+            if(tenth > 0) {
+                boolean[][] modelTenth = Number.forNumber(tenth).getNumber();
+                drawModel(canvas, modelTenth, gap, adjustment);
+                gap += (Number.COLUMN_COUNT + 1) * blockWidth/adjustment;
+            }
+
+            modelOneth = Number.forNumber(oneth).getNumber();
             drawModel(canvas, modelOneth, gap, adjustment);
         }
 

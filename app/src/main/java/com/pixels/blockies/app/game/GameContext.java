@@ -21,6 +21,11 @@ public class GameContext {
     public static final Picker PICKER = new Picker();
 
     /**
+     * The highscore is responsible for storing the highest score
+     */
+    public static HighScore HIGH_SCORE;
+
+    /**
      * The current score (counter of completed lines)
      */
     private static int score = 0;
