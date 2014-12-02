@@ -18,7 +18,6 @@ import com.pixels.blockies.app.game.HighScore;
 public class GameActivity extends Activity {
     DrawingView drawView = null;
     BlockMover mover = null;
-    HighScore highScore = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +42,6 @@ public class GameActivity extends Activity {
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
@@ -64,6 +58,5 @@ public class GameActivity extends Activity {
     public void onResume(){
         super.onResume();
         mover.resumeMoving();
-
     }
 }

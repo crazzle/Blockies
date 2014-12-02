@@ -155,8 +155,8 @@ public class DrawingView extends View implements View.OnTouchListener {
             grid = GridDrawable.getInstance();
             statusPanel = new StatusPanelDrawable();
             restart = new RestartScreenDrawable();
+            this.setOnTouchListener(this);
         }
-        this.setOnTouchListener(this);
     }
 
     private void buildViewContext() {
@@ -178,13 +178,11 @@ public class DrawingView extends View implements View.OnTouchListener {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         init();
-        if(viewContext != null) {
-            statusPanel.draw(canvas);
-            if (!mover.hasEnded()) {
-                grid.draw(canvas);
-            } else {
-                restart.draw(canvas);
-            }
+        statusPanel.draw(canvas);
+        if (!mover.hasEnded()) {
+            grid.draw(canvas);
+        } else {
+            restart.draw(canvas);
         }
         invalidate();
     }

@@ -126,34 +126,36 @@ public class StatusPanelDrawable implements Drawable {
             drawModel(canvas, modelSlash, gap, adjustment);
             gap += (Letter.COLUMN_COUNT + 1) * blockWidth/adjustment;
 
-            // Get the current highscore from GameContext
-            score = GameContext.HIGH_SCORE.getScore();
+            if(GameContext.HIGH_SCORE != null) {
+                // Get the current highscore from GameContext
+                score = GameContext.HIGH_SCORE.getScore();
 
-            // get the lowest decimal digit of the score
-            oneth = score%10;
+                // get the lowest decimal digit of the score
+                oneth = score % 10;
 
-            // get the middle decimal digit of the score
-            score /= 10;
-            tenth = score%10;
+                // get the middle decimal digit of the score
+                score /= 10;
+                tenth = score % 10;
 
-            // get the highest decimal digit of the score
-            score /= 10;
-            hundredth = score;
+                // get the highest decimal digit of the score
+                score /= 10;
+                hundredth = score;
 
-            if(hundredth > 0) {
-                boolean[][] modelHundreth = com.pixels.blockies.app.draws.enums.Number.forNumber(hundredth).getNumber();
-                drawModel(canvas, modelHundreth, gap, adjustment);
-                gap += (Number.COLUMN_COUNT + 1) * blockWidth/adjustment;
+                if (hundredth > 0) {
+                    boolean[][] modelHundreth = com.pixels.blockies.app.draws.enums.Number.forNumber(hundredth).getNumber();
+                    drawModel(canvas, modelHundreth, gap, adjustment);
+                    gap += (Number.COLUMN_COUNT + 1) * blockWidth / adjustment;
+                }
+
+                if (tenth > 0) {
+                    boolean[][] modelTenth = Number.forNumber(tenth).getNumber();
+                    drawModel(canvas, modelTenth, gap, adjustment);
+                    gap += (Number.COLUMN_COUNT + 1) * blockWidth / adjustment;
+                }
+
+                modelOneth = Number.forNumber(oneth).getNumber();
+                drawModel(canvas, modelOneth, gap, adjustment);
             }
-
-            if(tenth > 0) {
-                boolean[][] modelTenth = Number.forNumber(tenth).getNumber();
-                drawModel(canvas, modelTenth, gap, adjustment);
-                gap += (Number.COLUMN_COUNT + 1) * blockWidth/adjustment;
-            }
-
-            modelOneth = Number.forNumber(oneth).getNumber();
-            drawModel(canvas, modelOneth, gap, adjustment);
         }
 
         /**
