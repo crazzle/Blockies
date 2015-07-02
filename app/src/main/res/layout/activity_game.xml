@@ -10,7 +10,7 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp">
 
-        <com.pixels.blockies.app.draws.DrawingView
+        <com.pixels.blockies.game.draws.DrawingView
                 android:id="@+id/drawing"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
