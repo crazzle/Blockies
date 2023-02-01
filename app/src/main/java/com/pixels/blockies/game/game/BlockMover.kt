@@ -292,15 +292,15 @@ class BlockMover : Runnable {
      */
     private fun isRotatable(): Boolean {
         var check = true
-        if (block!!.getX() + block!!.rotatedOffsetX < 0) {
+        if (block!!.getX() + block!!.getRotatedOffsetX() < 0) {
             check = false
-        } else if (block!!.getX() + block!!.rotatedOffsetX > GameContext.HORIZONTAL_BLOCK_COUNT) {
+        } else if (block!!.getX() + block!!.getRotatedOffsetX() > GameContext.HORIZONTAL_BLOCK_COUNT) {
             check = false
-        } else if (block!!.getY() + block!!.rotatedOffsetY > GameContext.VERTICAL_BLOCK_COUNT) {
+        } else if (block!!.getY() + block!!.getRotatedOffsetY() > GameContext.VERTICAL_BLOCK_COUNT) {
             check = false
         } else {
-            for (i in 0 until block!!.rotatedOffsetX) {
-                for (j in 0 until block!!.rotatedOffsetY) {
+            for (i in 0 until block!!.getRotatedOffsetX()) {
+                for (j in 0 until block!!.getRotatedOffsetY()) {
                     if (block!!.getRotatedInner(i, j) > Grid.Companion.EMPTY) {
                         if (grid!!.getPositionValue(
                                 i + block!!.getX(),
