@@ -1,31 +1,20 @@
-package com.pixels.blockies.game.game.figures;
+package com.pixels.blockies.game.game.figures
 
-public class FigureI extends AbstractFigure {
+class FigureI : AbstractFigure() {
+    private val figures = arrayOf(
+        arrayOf<IntArray?>(intArrayOf(0, 0, 0, 0)),
+        arrayOf<IntArray?>(intArrayOf(0), intArrayOf(0), intArrayOf(0), intArrayOf(0))
+    )
 
-    private int[][][] figures = new int[][][]{
-            {
-                    {0, 0, 0, 0}
-            },
-            {
-                    {0},
-                    {0},
-                    {0},
-                    {0}
-            }
-    };
-
-    @Override
-    protected int getFigureCount() {
-        return figures.length;
+    override fun getFigureCount(): Int {
+        return figures.size
     }
 
-    @Override
-    public int[][] get() {
-        return figures[getCurrentRotation()];
+    override fun get(): Array<IntArray?> {
+        return figures[currentRotation]
     }
 
-    @Override
-    public int[][] getNext() {
-        return figures[getNextRotation()];
+    override fun getNext(): Array<IntArray?> {
+        return figures[nextRotation]
     }
 }

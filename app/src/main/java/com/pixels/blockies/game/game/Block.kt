@@ -1,63 +1,61 @@
-package com.pixels.blockies.game.game;
+package com.pixels.blockies.game.game
 
-import com.pixels.blockies.game.game.figures.Rotatable;
+import com.pixels.blockies.game.game.figures.Rotatable
 
 /**
  * Represents a logical block with a coordinate in the grid
  * and a figure that can be rotated
  */
-public class Block {
-    int x = -1;
-    int y = -1;
-    Rotatable figure = null;
+class Block(figure: Rotatable?) {
+    private var x = -1
+    private var y = -1
+    var figure: Rotatable? = null
 
-    public Block(Rotatable figure)
-    {
-        this.figure = figure;
+    init {
+        this.figure = figure
     }
 
-    public int getX() {
-        return x;
+    fun getX(): Int {
+        return x
     }
 
-    public void setX(int x) {
-        this.x = x;
+    fun setX(x: Int) {
+        this.x = x
     }
 
-    public int getY() {
-        return y;
+    fun getY(): Int {
+        return y
     }
 
-    public void setY(int y) {
-        this.y = y;
+    fun setY(y: Int) {
+        this.y = y
     }
 
-    public int getInner(int x, int y) {
-        return figure.get()[y][x];
+    fun getInner(x: Int, y: Int): Int {
+        return figure!!.get()[y]!![x]
     }
 
-    public int getOffsetY() {
-        return figure.get().length;
+    fun getOffsetY(): Int {
+        return figure!!.get().size
     }
 
-    public int getOffsetX() {
-        return figure.get()[0].length;
+    fun getOffsetX(): Int {
+        return figure!!.get()[0]!!.size
     }
 
-    public void rotate(){
-        figure.rotate();
+    fun rotate() {
+        figure!!.rotate()
     }
 
-    public int getRotatedInner(int x, int y){
-        return figure.getNext()[y][x];
+    fun getRotatedInner(x: Int, y: Int): Int {
+        return figure!!.getNext()[y]!![x]
     }
 
-    public int getRotatedOffsetY() {
-        return figure.getNext().length;
+    fun getRotatedOffsetY(): Int {
+        return figure!!.getNext().size
     }
 
-    public int getRotatedOffsetX() {
-        return figure.getNext()[0].length;
+    fun getRotatedOffsetX(): Int {
+        return figure!!.getNext()[0]!!.size
     }
-
 }

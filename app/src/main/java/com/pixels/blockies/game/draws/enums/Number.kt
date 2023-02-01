@@ -1,95 +1,109 @@
-package com.pixels.blockies.game.draws.enums;
+package com.pixels.blockies.game.draws.enums
 
 /**
  * Enum with all numbers that are
  * drawn using blocks
  */
-public enum Number {
-    ZERO(new boolean[][]{
-            {true, true, true},
-            {true, false, true},
-            {true, false, true},
-            {true, false, true},
-            {true, true, true}
-    }),
-    ONE(new boolean[][]{
-            {false, false, true},
-            {false, false, true},
-            {false, false, true},
-            {false, false, true},
-            {false, false, true}
-    }),
-    TWO(new boolean[][]{
-            {true, true, true},
-            {false, false, true},
-            {true, true, true},
-            {true, false, false},
-            {true, true, true}
-    }),
-    THREE(new boolean[][]{
-            {true, true, true},
-            {false, false, true},
-            {true, true, true},
-            {false, false, true},
-            {true, true, true}
-    }),
-    FOUR(new boolean[][]{
-            {true, false, true},
-            {true, false, true},
-            {true, true, true},
-            {false, false, true},
-            {false, false, true}
-    }),
-    FIVE(new boolean[][]{
-            {true, true, true},
-            {true, false, false},
-            {true, true, true},
-            {false, false, true},
-            {true, true, true}
-    }),
-    SIX(new boolean[][]{
-            {true, true, true},
-            {true, false, false},
-            {true, true, true},
-            {true, false, true},
-            {true, true, true}
-    }),
-    SEVEN(new boolean[][]{
-            {true, true, true},
-            {false, false, true},
-            {false, false, true},
-            {false, false, true},
-            {false, false, true}
-    }),
-    EIGHT(new boolean[][]{
-            {true, true, true},
-            {true, false, true},
-            {true, true, true},
-            {true, false, true},
-            {true, true, true}
-    }),
-    NINE(new boolean[][]{
-            {true, true, true},
-            {true, false, true},
-            {true, true, true},
-            {false, false, true},
-            {true, true, true}
-    });
+enum class Number(private val field: Array<BooleanArray>) {
+    ZERO(
+        arrayOf(
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, true, true)
+        )
+    ),
+    ONE(
+        arrayOf(
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(false, false, true)
+        )
+    ),
+    TWO(
+        arrayOf(
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(true, false, false),
+            booleanArrayOf(true, true, true)
+        )
+    ),
+    THREE(
+        arrayOf(
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(true, true, true)
+        )
+    ),
+    FOUR(
+        arrayOf(
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(false, false, true)
+        )
+    ),
+    FIVE(
+        arrayOf(
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(true, false, false),
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(true, true, true)
+        )
+    ),
+    SIX(
+        arrayOf(
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(true, false, false),
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, true, true)
+        )
+    ),
+    SEVEN(
+        arrayOf(
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(false, false, true)
+        )
+    ),
+    EIGHT(
+        arrayOf(
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, true, true)
+        )
+    ),
+    NINE(
+        arrayOf(
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(true, false, true),
+            booleanArrayOf(true, true, true),
+            booleanArrayOf(false, false, true),
+            booleanArrayOf(true, true, true)
+        )
+    );
 
-    public static final int COLUMN_COUNT = 3;
-
-    private boolean[][] field;
-
-    private Number(boolean[][] field) {
-        this.field = field;
+    fun getNumber(): Array<BooleanArray> {
+        return field
     }
 
-    public static Number forNumber(int number) {
-        return values()[number];
+    companion object {
+        const val COLUMN_COUNT = 3
+        fun forNumber(number: Int): Number {
+            return values()[number]
+        }
     }
-
-    public boolean[][] getNumber() {
-        return field;
-    }
-
 }

@@ -1,62 +1,53 @@
-package com.pixels.blockies.game;
+package com.pixels.blockies.game
 
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
-import com.pixels.blockies.game.draws.DrawingView;
-import com.pixels.blockies.game.game.BlockMover;
-import com.pixels.blockies.game.game.GameContext;
-import com.pixels.blockies.game.game.HighScore;
+import android.app.Activity
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.os.Process
+import android.view.Window
+import android.view.WindowManager
+import com.pixels.blockies.game.draws.DrawingView
+import com.pixels.blockies.game.game.BlockMover
+import com.pixels.blockies.game.game.GameContext
+import com.pixels.blockies.game.game.HighScore
 
 /**
  * Entry point of the app - The GameActivity
  */
-public class GameActivity extends Activity {
-    DrawingView drawView = null;
-    BlockMover mover = null;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        GameContext.HIGH_SCORE = new HighScore(getDataStore());
-
-        drawView = new DrawingView(this);
-        mover = new BlockMover();
-        mover.start();
-        drawView.setBlockMover(mover);
-        setContentView(drawView);
+class GameActivity : Activity() {
+    var drawView: DrawingView? = null
+    var mover: BlockMover? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        GameContext.HIGH_SCORE = HighScore(dataStore)
+        drawView = DrawingView(this)
+        mover = BlockMover()
+        mover!!.start()
+        drawView!!.setBlockMover(mover)
+        setContentView(drawView)
     }
 
-    private SharedPreferences getDataStore(){
-        SharedPreferences prefs = this.getSharedPreferences("blockiesDataStore", Context.MODE_PRIVATE);
-        return prefs;
+    private val dataStore: SharedPreferences
+        private get() = getSharedPreferences("blockiesDataStore", MODE_PRIVATE)
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+        Process.killProcess(Process.myPid())
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
+    public override fun onPause() {
+        super.onPause()
+        mover!!.pauseMoving()
     }
 
-    @Override
-    public void onPause(){
-        super.onPause();
-        mover.pauseMoving();
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        mover.resumeMoving();
+    public override fun onResume() {
+        super.onResume()
+        mover!!.resumeMoving()
     }
 }

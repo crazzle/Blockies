@@ -1,59 +1,40 @@
-package com.pixels.blockies.game.game.figures;
+package com.pixels.blockies.game.game.figures
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*
 
-public class Picker {
-    private Random random = new Random();
-    private Queue<Rotatable> queue = new LinkedList<Rotatable>();
+class Picker {
+    private val random = Random()
+    private val queue: Queue<Rotatable?> = LinkedList()
 
-    public Picker() {
-        queue.add(get());
+    init {
+        queue.add(get())
     }
 
-    private Rotatable get() {
-        int num = random.nextInt(9);
-        Rotatable picked = null;
-        switch (num) {
-            case 0:
-                picked = new FigureI();
-                break;
-            case 1:
-                picked = new FigureJ();
-                break;
-            case 2:
-                picked = new FigureL();
-                break;
-            case 3:
-                picked = new FigureT();
-                break;
-            case 4:
-                picked = new FigureZ();
-                break;
-            case 5:
-                picked = new FigureZRevert();
-                break;
-            case 6:
-                picked = new FigureO();
-                break;
-            case 7:
-                picked = new FigureSplitLine();
-                break;
-            case 8:
-                picked = new FigureSingleDot();
-                break;
+    private fun get(): Rotatable? {
+        val num = random.nextInt(9)
+        var picked: Rotatable? = null
+        when (num) {
+            0 -> picked = FigureI()
+            1 -> picked = FigureJ()
+            2 -> picked = FigureL()
+            3 -> picked = FigureT()
+            4 -> picked = FigureZ()
+            5 -> picked = FigureZRevert()
+            6 -> picked = FigureO()
+            7 -> picked = FigureSplitLine()
+            8 -> picked = FigureSingleDot()
         }
-        return picked;
+        return picked
     }
 
-    public synchronized Rotatable pick() {
-        queue.add(get());
-        return queue.poll();
+    @Synchronized
+    fun pick(): Rotatable? {
+        queue.add(get())
+        return queue.poll()
     }
 
-    public synchronized Rotatable peek() {
-        return queue.peek();
+    @Synchronized
+    fun peek(): Rotatable? {
+        return queue.peek()
     }
-
 }

@@ -1,42 +1,38 @@
-package com.pixels.blockies.game.game.figures;
+package com.pixels.blockies.game.game.figures
 
-import com.pixels.blockies.game.game.Grid;
+import com.pixels.blockies.game.game.Grid
 
-public class FigureT extends AbstractFigure {
+class FigureT : AbstractFigure() {
+    private val figures = arrayOf(
+        arrayOf<IntArray?>(
+            intArrayOf(Grid.Companion.EMPTY, 4, Grid.Companion.EMPTY),
+            intArrayOf(4, 4, 4)
+        ),
+        arrayOf<IntArray?>(
+            intArrayOf(4, Grid.Companion.EMPTY),
+            intArrayOf(4, 4),
+            intArrayOf(4, Grid.Companion.EMPTY)
+        ),
+        arrayOf<IntArray?>(
+            intArrayOf(4, 4, 4),
+            intArrayOf(Grid.Companion.EMPTY, 4, Grid.Companion.EMPTY)
+        ),
+        arrayOf<IntArray?>(
+            intArrayOf(Grid.Companion.EMPTY, 4),
+            intArrayOf(4, 4),
+            intArrayOf(Grid.Companion.EMPTY, 4)
+        )
+    )
 
-    private int[][][] figures = new int[][][]{
-            {
-                    {Grid.EMPTY, 4, Grid.EMPTY},
-                    {4, 4, 4}
-            },
-            {
-                    {4, Grid.EMPTY},
-                    {4, 4},
-                    {4, Grid.EMPTY}
-            },
-            {
-                    {4, 4, 4},
-                    {Grid.EMPTY, 4, Grid.EMPTY}
-            },
-            {
-                    {Grid.EMPTY, 4},
-                    {4, 4},
-                    {Grid.EMPTY, 4}
-            }
-    };
-
-    @Override
-    protected int getFigureCount() {
-        return figures.length;
+    override fun getFigureCount(): Int {
+        return figures.size
     }
 
-    @Override
-    public int[][] get() {
-        return figures[getCurrentRotation()];
+    override fun get(): Array<IntArray?> {
+        return figures[currentRotation]
     }
 
-    @Override
-    public int[][] getNext() {
-        return figures[getNextRotation()];
+    override fun getNext(): Array<IntArray?> {
+        return figures[nextRotation]
     }
 }

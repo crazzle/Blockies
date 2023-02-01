@@ -1,62 +1,61 @@
-package com.pixels.blockies.game.draws;
+package com.pixels.blockies.game.draws
 
 /**
  * The context that holds important information
  * in order to draw all the block correctly
  */
-public class ViewContext {
-    private int border = -1;
-    private int thickness = -1;
-    private float width = -1;
-    private float height = -1;
-    private int blockHeight = -1;
-    private int blockWidth =  -1;
-
-    public int getBorder() {
-        return border;
+class ViewContext {
+    private var border = -1
+    private var thickness = -1
+    private var width = -1f
+    private var height = -1f
+    private var blockHeight = -1
+    private var blockWidth = -1
+    fun getBorder(): Int {
+        return border
     }
 
-    public void setBorder(int border) {
-        this.border = border;
+    fun setBorder(border: Int) {
+        this.border = border
     }
 
-    public int getThickness() {
-        return thickness;
+    fun getThickness(): Int {
+        return thickness
     }
 
-    public void setStrokeThickness(int thickness) {
-        this.thickness = thickness;
+    fun setStrokeThickness(thickness: Int) {
+        this.thickness = thickness
     }
 
-    public float getWidth() {
-        return width;
+    fun getWidth(): Float {
+        return width
     }
 
-    public void setWidth(float width) {
-        this.width = width;
+    fun setWidth(width: Float) {
+        this.width = width
     }
 
-    public float getHeight() {
-        return height;
+    fun getHeight(): Float {
+        return height
     }
 
-    public void setHeight(float height) {
-        this.height = height;
+    fun setHeight(height: Float) {
+        this.height = height
     }
 
-    public int getBlockHeight() {
-        return blockHeight;
+    fun getBlockHeight(): Int {
+        return blockHeight
     }
 
-    public void setBlockHeight(int blockHeight) {
-        this.blockHeight = blockHeight;
+    fun setBlockHeight(blockHeight: Int) {
+        this.blockHeight = blockHeight
     }
 
-    public int getBlockWidth() {
-        return blockWidth;
+    fun getBlockWidth(): Int {
+        return blockWidth
     }
 
-    public void setBlockWidth(int blockWidth) {
-        this.blockWidth = blockWidth;
+    fun setBlockWidth(blockWidth: Int) {
+        this.blockWidth = blockWidth
     }
 }

@@ -1,45 +1,44 @@
-package com.pixels.blockies.game.draws;
+package com.pixels.blockies.game.draws
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import com.pixels.blockies.game.draws.api.Drawable;
-import com.pixels.blockies.game.draws.enums.GameColor;
+import android.graphics.Canvas
+import android.graphics.Paint
+import com.pixels.blockies.game.draws.api.Drawable
+import com.pixels.blockies.game.draws.enums.GameColor
 
 /**
  * Draws a single block on a specific location by given width and height.
  * It can also be adjusted (shrink/expand) by a factor. That way the proportions
  * to its stroke thickness will be kept.
  */
-class BlockDrawable implements Drawable {
-
-    private Paint paint = new Paint();
+class BlockDrawable : Drawable {
+    private val paint = Paint()
 
     /**
      * The cooridinates of the block
      */
-    private int x = 0;
-    private int y = 0;
+    private var x = 0
+    private var y = 0
 
     /**
      * The color of the block
      */
-    private int specificColor = -1;
+    private var specificColor = -1
 
     /**
      * The stroke size of the block
      */
-    private int specificBlockStroke = -1;
+    private var specificBlockStroke = -1
 
     /**
      * The adjustment to scale the block up or down
      */
-    private float adjustment = -1;
+    private var adjustment = -1f
 
     /**
      * Width and height of the block
      */
-    private int blockWidth = -1;
-    private int blockHeight = -1;
+    private var blockWidth = -1
+    private var blockHeight = -1
 
     /**
      * Blockdrawable that keeps its size as defined by blockwidth and blockheight
@@ -49,12 +48,12 @@ class BlockDrawable implements Drawable {
      * @param blockwidth
      * @param blockHeight
      */
-    public BlockDrawable(int x, int y, int blockwidth, int blockHeight){
-        this.x = x;
-        this.y = y;
-        this.adjustment = 1;
-        this.blockWidth = blockwidth;
-        this.blockHeight = blockHeight;
+    constructor(x: Int, y: Int, blockwidth: Int, blockHeight: Int) {
+        this.x = x
+        this.y = y
+        adjustment = 1f
+        blockWidth = blockwidth
+        this.blockHeight = blockHeight
     }
 
     /**
@@ -66,33 +65,45 @@ class BlockDrawable implements Drawable {
      * @param blockHeight
      * @param adjustment
      */
-    public BlockDrawable(int x, int y, int blockwidth, int blockHeight, float adjustment){
-        this.x = x;
-        this.y = y;
-        this.adjustment = adjustment;
-        this.blockWidth = blockwidth;
-        this.blockHeight = blockHeight;
+    constructor(x: Int, y: Int, blockwidth: Int, blockHeight: Int, adjustment: Float) {
+        this.x = x
+        this.y = y
+        this.adjustment = adjustment
+        blockWidth = blockwidth
+        this.blockHeight = blockHeight
     }
 
-    public void draw(Canvas canvas) {
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(specificColor);
-        canvas.drawRect(x, y, x + blockWidth / adjustment, y + blockHeight / adjustment, paint);
-        drawStroke(canvas);
+    override fun draw(canvas: Canvas) {
+        paint.style = Paint.Style.FILL
+        paint.color = specificColor
+        canvas.drawRect(
+            x.toFloat(),
+            y.toFloat(),
+            x + blockWidth / adjustment,
+            y + blockHeight / adjustment,
+            paint
+        )
+        drawStroke(canvas)
     }
 
-    public void drawStroke(Canvas canvas){
-        paint.setStrokeWidth(specificBlockStroke);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(GameColor.WHITE.getColor());
-        canvas.drawRect(x, y, x + blockWidth/adjustment, y + blockHeight/adjustment, paint);
+    fun drawStroke(canvas: Canvas) {
+        paint.strokeWidth = specificBlockStroke.toFloat()
+        paint.style = Paint.Style.STROKE
+        paint.color = GameColor.WHITE.getColor()
+        canvas.drawRect(
+            x.toFloat(),
+            y.toFloat(),
+            x + blockWidth / adjustment,
+            y + blockHeight / adjustment,
+            paint
+        )
     }
 
-    public void setSpecificColor(int specificColor) {
-        this.specificColor = specificColor;
+    fun setSpecificColor(specificColor: Int) {
+        this.specificColor = specificColor
     }
 
-    public void setSpecificBlockStroke(int specificBlockStroke) {
-        this.specificBlockStroke = specificBlockStroke;
+    fun setSpecificBlockStroke(specificBlockStroke: Int) {
+        this.specificBlockStroke = specificBlockStroke
     }
 }

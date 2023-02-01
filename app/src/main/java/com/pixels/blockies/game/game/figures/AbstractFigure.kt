@@ -1,28 +1,21 @@
-package com.pixels.blockies.game.game.figures;
+package com.pixels.blockies.game.game.figures
 
-public abstract class AbstractFigure implements Rotatable {
-    private int currentRotation = 0;
-
-    protected abstract int getFigureCount();
-
-    protected int getCurrentRotation() {
-        return currentRotation;
-    }
-
-    protected int getNextRotation() {
-        if (currentRotation < getFigureCount() - 1) {
-            return currentRotation+1;
+abstract class AbstractFigure : Rotatable {
+    protected var currentRotation = 0
+        private set
+    protected abstract val figureCount: Int
+    protected val nextRotation: Int
+        protected get() = if (currentRotation < figureCount - 1) {
+            currentRotation + 1
         } else {
-            return 0;
+            0
+        }
+
+    override fun rotate() {
+        if (currentRotation < figureCount - 1) {
+            currentRotation++
+        } else {
+            currentRotation = 0
         }
     }
-
-    public void rotate() {
-        if (currentRotation < getFigureCount() - 1) {
-            currentRotation++;
-        } else {
-            currentRotation = 0;
-        }
-    }
-
 }

@@ -1,62 +1,44 @@
-package com.pixels.blockies.game.draws;
+package com.pixels.blockies.game.draws
 
-import android.graphics.Canvas;
-import com.pixels.blockies.game.draws.api.Drawable;
-import com.pixels.blockies.game.draws.enums.GameColor;
-import com.pixels.blockies.game.game.GameContext;
-import com.pixels.blockies.game.game.Grid;
+import android.graphics.Canvas
+import com.pixels.blockies.game.draws.api.Drawable
+import com.pixels.blockies.game.draws.enums.GameColor
+import com.pixels.blockies.game.game.GameContext
+import com.pixels.blockies.game.game.Grid
 
 /**
  * Draws the underlying logical grid of the game
  */
-public class GridDrawable implements Drawable {
-
-    /**
-     * Provide the GridDrawable as a singleton
-     */
-    private static GridDrawable grid = null;
-
+class GridDrawable private constructor() : Drawable {
     /**
      * Array of block drawables which corresponds to the logical grid
      */
-    BlockDrawable[][] blockDrawables = new BlockDrawable[GameContext.HORIZONTAL_BLOCK_COUNT][GameContext.VERTICAL_BLOCK_COUNT];
+    var blockDrawables =
+        Array(GameContext.HORIZONTAL_BLOCK_COUNT) { arrayOfNulls<BlockDrawable>(GameContext.VERTICAL_BLOCK_COUNT) }
 
     /**
      * The logical grid which is used by the block-mover
      */
-    Grid logicalGrid = Grid.getInstance();
+    var logicalGrid: Grid? = Grid.Companion.getInstance()
 
     /**
      * The ViewContext with all the important information about sizes, resolution and much more
      */
-    ViewContext context = null;
+    var context: ViewContext? = null
 
     /**
      * Private constructor for singleton access
      */
-    private GridDrawable() {
-       context = DrawingView.getViewContext();
+    init {
+        context = DrawingView.Companion.getViewContext()
     }
 
-    /**
-     * Factory method to provide the singleton instance
-     *
-     * @return
-     */
-    public static GridDrawable getInstance() {
-        if (grid == null) {
-            grid = new GridDrawable();
-        }
-        return grid;
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-        updateFromLogicalGrid();
-        for (int i = 0; i < blockDrawables.length; i++) {
-            for (int j = 0; j < blockDrawables[i].length; j++) {
+    override fun draw(canvas: Canvas) {
+        updateFromLogicalGrid()
+        for (i in blockDrawables.indices) {
+            for (j in blockDrawables[i].indices) {
                 if (blockDrawables[i][j] != null) {
-                    blockDrawables[i][j].draw(canvas);
+                    blockDrawables[i][j]!!.draw(canvas)
                 }
             }
         }
@@ -65,23 +47,43 @@ public class GridDrawable implements Drawable {
     /**
      * Updates the array of block drawables with the current information from the local grid
      */
-    private void updateFromLogicalGrid() {
-        for (int i = 0; i < blockDrawables.length; i++) {
-            BlockDrawable[] line = blockDrawables[i];
-            for (int j = 0; j < line.length; j++) {
-                int fieldValue = logicalGrid.getPositionValue(i, j);
-                if (fieldValue > Grid.EMPTY) {
-                    int blockColor = GameColor.forFigureNumber(fieldValue);
-                    int blockX = (i * context.getBlockWidth()) + context.getBorder();
-                    int blockY = (j * context.getBlockHeight()) + context.getBorder();
-                    BlockDrawable b = new BlockDrawable(blockX, blockY, context.getBlockWidth(), context.getBlockHeight());
-                    b.setSpecificColor(blockColor);
-                    b.setSpecificBlockStroke(context.getThickness());
-                    line[j] = b;
+    private fun updateFromLogicalGrid() {
+        for (i in blockDrawables.indices) {
+            val line = blockDrawables[i]
+            for (j in line.indices) {
+                val fieldValue = logicalGrid!!.getPositionValue(i, j)
+                if (fieldValue > Grid.Companion.EMPTY) {
+                    val blockColor: Int = GameColor.Companion.forFigureNumber(fieldValue)
+                    val blockX = i * context!!.getBlockWidth() + context!!.getBorder()
+                    val blockY = j * context!!.getBlockHeight() + context!!.getBorder()
+                    val b =
+                        BlockDrawable(blockX, blockY, context!!.getBlockWidth(), context!!.getBlockHeight())
+                    b.setSpecificColor(blockColor)
+                    b.setSpecificBlockStroke(context!!.getThickness())
+                    line[j] = b
                 } else {
-                    line[j] = null;
+                    line[j] = null
                 }
             }
+        }
+    }
+
+    companion object {
+        /**
+         * Provide the GridDrawable as a singleton
+         */
+        private var grid: GridDrawable? = null
+
+        /**
+         * Factory method to provide the singleton instance
+         *
+         * @return
+         */
+        fun getInstance(): GridDrawable? {
+            if (grid == null) {
+                grid = GridDrawable()
+            }
+            return grid
         }
     }
 }
