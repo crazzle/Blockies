@@ -32,7 +32,7 @@ class StatusPanelDrawable : Drawable {
     var context: ViewContext? = null
 
     init {
-        context = DrawingView.Companion.getViewContext()
+        context = DrawingView.getViewContext()
         blockHeight = context!!.getBlockHeight() / MINI_BLOCK_FACTOR
         blockWidth = context!!.getBlockWidth() / MINI_BLOCK_FACTOR
         blockStroke = context!!.getThickness() / MINI_BLOCK_FACTOR
@@ -52,7 +52,7 @@ class StatusPanelDrawable : Drawable {
             // The the next rotatable that should be drawn
             val f = GameContext.PICKER.peek()
             val model = f!!.get()
-            for (i in model!!.indices) {
+            for (i in model.indices) {
                 for (j in model[i]!!.indices) {
                     if (model[i]!![j] != Grid.Companion.EMPTY) {
                         val blockY = i * blockHeight + context!!.getBorder()

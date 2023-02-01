@@ -125,11 +125,6 @@ class DrawingView(context: Context?) : View(context), OnTouchListener {
         }
     }
 
-    /**
-     * Constructor
-     *
-     * @param context
-     */
     init {
         setBackgroundColor(GameColor.BLUE.getColor())
     }
@@ -142,7 +137,7 @@ class DrawingView(context: Context?) : View(context), OnTouchListener {
     fun init() {
         if (viewContext == null) {
             buildViewContext()
-            grid = GridDrawable.Companion.getInstance()
+            grid = GridDrawable.getInstance()
             statusPanel = StatusPanelDrawable()
             restart = RestartScreenDrawable()
             setOnTouchListener(this)

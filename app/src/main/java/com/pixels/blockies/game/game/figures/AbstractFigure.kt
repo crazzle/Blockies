@@ -6,7 +6,7 @@ abstract class AbstractFigure : Rotatable {
     protected abstract fun getFigureCount(): Int
 
     protected val nextRotation: Int
-        protected get() = if (currentRotation < getFigureCount() - 1) {
+        get() = if (currentRotation < getFigureCount() - 1) {
             currentRotation + 1
         } else {
             0

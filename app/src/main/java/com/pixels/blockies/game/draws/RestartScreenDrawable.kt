@@ -14,17 +14,17 @@ class RestartScreenDrawable : Drawable {
     private var blockHeight = -1
     private var blockWidth = -1
     private var blockStroke = -1
-    private val TAP = "TAP!"
+    private val tap = "TAP!"
     override fun draw(canvas: Canvas) {
         var next = 0
-        for (c in TAP.toCharArray()) {
+        for (c in tap.toCharArray()) {
             drawChar(canvas, c, xCenter + next, yCenter)
-            next = (next + TAP.length + 1) * blockWidth
+            next = (next + tap.length + 1) * blockWidth
         }
     }
 
     fun drawChar(canvas: Canvas, letter: Char, xPos: Int, yPos: Int) {
-        val model: Array<BooleanArray> = Letter.Companion.forLetter(letter)!!.getLetter()
+        val model: Array<BooleanArray> = Letter.forLetter(letter)!!.getLetter()
         for (i in model.indices) {
             for (j in model[i].indices) {
                 if (model[i][j]) {
@@ -40,15 +40,15 @@ class RestartScreenDrawable : Drawable {
     }
 
     init {
-        val context: ViewContext? = DrawingView.Companion.getViewContext()
+        val context: ViewContext? = DrawingView.getViewContext()
         if (context != null) {
             blockHeight = (context.getBlockHeight() / MINI_BLOCK_FACTOR).toInt()
             blockWidth = (context.getBlockWidth() / MINI_BLOCK_FACTOR).toInt()
             blockStroke = (context.getThickness() / MINI_BLOCK_FACTOR).toInt()
             xCenter =
                 context.getWidth()
-                    .toInt() / 2 - Letter.Companion.COLUMN_COUNT * (TAP.length - 1) * blockWidth
-            yCenter = context.getHeight().toInt() / 2 - Letter.Companion.COLUMN_COUNT * blockHeight
+                    .toInt() / 2 - Letter.COLUMN_COUNT * (tap.length - 1) * blockWidth
+            yCenter = context.getHeight().toInt() / 2 - Letter.COLUMN_COUNT * blockHeight
         }
     }
 

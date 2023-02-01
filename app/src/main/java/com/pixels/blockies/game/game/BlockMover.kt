@@ -17,7 +17,7 @@ class BlockMover : Runnable {
     /**
      * The underlying logical grid
      */
-    private val grid: Grid? = Grid.Companion.getInstance()
+    private val grid: Grid? = Grid.getInstance()
 
     /**
      * The current block that is moved by the mover
@@ -49,7 +49,7 @@ class BlockMover : Runnable {
      * difference that the interval will be reduced
      * on next level
      */
-    private val INTERVAL_DIFF = 20 // 25 Levels
+    private val INTERVALDIFF = 20 // 25 Levels
 
     init {
         putNewBlockInGame()
@@ -108,12 +108,12 @@ class BlockMover : Runnable {
             if (!notFinished) {
                 removeBlock()
                 val completed = sage.checkForCompleteLines()
-                if (completed!!.size > 0) {
+                if (completed.isNotEmpty()) {
                     grid!!.shiftRemoveCompleted(completed)
                     GameContext.addToScore(completed.size)
                     for (i in completed.indices) {
-                        if (interval - INTERVAL_DIFF > MIN_INTERVAL) {
-                            interval -= INTERVAL_DIFF
+                        if (interval - INTERVALDIFF > MIN_INTERVAL) {
+                            interval -= INTERVALDIFF
                             createNewSchedule(this, interval)
                         }
                     }
@@ -129,11 +129,11 @@ class BlockMover : Runnable {
         var check = false
         for (i in 0 until block!!.getOffsetX()) {
             for (j in 0 until block!!.getOffsetY()) {
-                if (block!!.getInner(i, j) > Grid.Companion.EMPTY) {
+                if (block!!.getInner(i, j) > Grid.EMPTY) {
                     if (grid!!.getPositionValue(
-                            i + block!!.getX(),
+                            i + block!!.x,
                             j + 1 + block!!.getY()
-                        ) > Grid.Companion.EMPTY
+                        ) > Grid.EMPTY
                     ) {
                         check = true
                     }
@@ -150,8 +150,8 @@ class BlockMover : Runnable {
         for (i in 0 until block!!.getOffsetX()) {
             for (j in 0 until block!!.getOffsetY()) {
                 if (block!!.getY() + j < GameContext.VERTICAL_BLOCK_COUNT) {
-                    if (block!!.getInner(i, j) != Grid.Companion.EMPTY) {
-                        grid!!.add(block!!.getX() + i, block!!.getY() + j, block!!.getInner(i, j))
+                    if (block!!.getInner(i, j) != Grid.EMPTY) {
+                        grid!!.add(block!!.x + i, block!!.getY() + j, block!!.getInner(i, j))
                     }
                 }
             }
@@ -169,7 +169,7 @@ class BlockMover : Runnable {
         if (isBlockInGame()) {
             removeBlockFromGrid()
             if (!isHorizontalNeighborOccupied(offset)) {
-                block!!.setX(block!!.getX() + offset)
+                block!!.x = block!!.x + offset
             }
             addBlockToGrid()
         }
@@ -181,18 +181,18 @@ class BlockMover : Runnable {
      */
     private fun isHorizontalNeighborOccupied(offset: Int): Boolean {
         var check = false
-        if (block!!.getX() + offset < 0) {
+        if (block!!.x + offset < 0) {
             check = true
-        } else if (block!!.getX() + offset + block!!.getOffsetX() > GameContext.HORIZONTAL_BLOCK_COUNT) {
+        } else if (block!!.x + offset + block!!.getOffsetX() > GameContext.HORIZONTAL_BLOCK_COUNT) {
             check = true
         } else {
             for (i in 0 until block!!.getOffsetX()) {
                 for (j in 0 until block!!.getOffsetY()) {
-                    if (block!!.getInner(i, j) > Grid.Companion.EMPTY) {
+                    if (block!!.getInner(i, j) > Grid.EMPTY) {
                         if (grid!!.getPositionValue(
-                                block!!.getX() + i + offset,
+                                block!!.x + i + offset,
                                 j + block!!.getY()
-                            ) > Grid.Companion.EMPTY
+                            ) > Grid.EMPTY
                         ) {
                             check = true
                         }
@@ -209,8 +209,8 @@ class BlockMover : Runnable {
     private fun removeBlockFromGrid() {
         for (i in 0 until block!!.getOffsetX()) {
             for (j in 0 until block!!.getOffsetY()) {
-                if (block!!.getInner(i, j) != Grid.Companion.EMPTY) {
-                    grid!!.remove(block!!.getX() + i, block!!.getY() + j)
+                if (block!!.getInner(i, j) != Grid.EMPTY) {
+                    grid!!.remove(block!!.x + i, block!!.getY() + j)
                 }
             }
         }
@@ -222,17 +222,17 @@ class BlockMover : Runnable {
      */
     @Synchronized
     fun putNewBlockInGame(): Boolean {
-        val b = Block(picker!!.pick())
+        val b = Block(picker.pick())
         b.setY(0)
-        b.setX(GameContext.HORIZONTAL_BLOCK_COUNT / 2)
+        b.x = GameContext.HORIZONTAL_BLOCK_COUNT / 2
         var check = true
         for (i in 0 until b.getOffsetX()) {
             for (j in 0 until b.getOffsetY()) {
-                if (b.getInner(i, j) > Grid.Companion.EMPTY) {
+                if (b.getInner(i, j) > Grid.EMPTY) {
                     if (grid!!.getPositionValue(
-                            i + b.getX(),
+                            i + b.x,
                             j + b.getY()
-                        ) > Grid.Companion.EMPTY
+                        ) > Grid.EMPTY
                     ) {
                         check = false
                     }
@@ -292,20 +292,20 @@ class BlockMover : Runnable {
      */
     private fun isRotatable(): Boolean {
         var check = true
-        if (block!!.getX() + block!!.getRotatedOffsetX() < 0) {
+        if (block!!.x + block!!.getRotatedOffsetX() < 0) {
             check = false
-        } else if (block!!.getX() + block!!.getRotatedOffsetX() > GameContext.HORIZONTAL_BLOCK_COUNT) {
+        } else if (block!!.x + block!!.getRotatedOffsetX() > GameContext.HORIZONTAL_BLOCK_COUNT) {
             check = false
         } else if (block!!.getY() + block!!.getRotatedOffsetY() > GameContext.VERTICAL_BLOCK_COUNT) {
             check = false
         } else {
             for (i in 0 until block!!.getRotatedOffsetX()) {
                 for (j in 0 until block!!.getRotatedOffsetY()) {
-                    if (block!!.getRotatedInner(i, j) > Grid.Companion.EMPTY) {
+                    if (block!!.getRotatedInner(i, j) > Grid.EMPTY) {
                         if (grid!!.getPositionValue(
-                                i + block!!.getX(),
+                                i + block!!.x,
                                 j + block!!.getY()
-                            ) > Grid.Companion.EMPTY
+                            ) > Grid.EMPTY
                         ) {
                             check = false
                         }

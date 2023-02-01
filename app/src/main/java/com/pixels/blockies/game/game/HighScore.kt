@@ -6,7 +6,7 @@ import android.content.SharedPreferences
  * The High-Score that is persisted in the SharedPreferences
  */
 class HighScore(dataStore: SharedPreferences?) {
-    var dataStore: SharedPreferences? = null
+    private var dataStore: SharedPreferences? = null
 
     init {
         this.dataStore = dataStore
@@ -21,7 +21,7 @@ class HighScore(dataStore: SharedPreferences?) {
         if (newScore > oldScore) {
             val edit = dataStore!!.edit()
             edit.putInt(KEY, newScore)
-            edit.commit()
+            edit.apply()
         }
     }
 

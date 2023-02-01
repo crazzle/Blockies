@@ -7,20 +7,12 @@ import com.pixels.blockies.game.game.figures.Rotatable
  * and a figure that can be rotated
  */
 class Block(figure: Rotatable?) {
-    private var x = -1
+    var x = -1
     private var y = -1
-    var figure: Rotatable? = null
+    private var figure: Rotatable? = null
 
     init {
         this.figure = figure
-    }
-
-    fun getX(): Int {
-        return x
-    }
-
-    fun setX(x: Int) {
-        this.x = x
     }
 
     fun getY(): Int {
