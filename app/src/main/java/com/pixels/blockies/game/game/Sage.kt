@@ -4,7 +4,7 @@ package com.pixels.blockies.game.game
  * The sages know how to check things
  */
 class Sage {
-    var grid: Grid? = Grid.Companion.getInstance()
+    var grid: Grid? = Grid.getInstance()
 
     /**
      * Checks for completed lines and returns a list with the index
