@@ -100,6 +100,18 @@ dependencies {
 //}
 //check.dependsOn ktlint
 
+configurations {
+    ktlint
+}// make ./gradlew ktlint for checking
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    mainClass.set("com.pinterest.ktlint.Main")
+    args "src/**/*.kt"
+}
+check.dependsOn ktlint //Attach to ./gradlew check as well.
+
 task ktlintFormat(type: JavaExec, group: "formatting") {
     description = "Fix Kotlin code style deviations."
     classpath = configurations.ktlint
