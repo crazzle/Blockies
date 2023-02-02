@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    // id "groovy"
+    id "com.diffplug.spotless" version "6.14.0"
 
 }
 
@@ -54,11 +54,24 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'org.spockframework:spock-core'
-    testImplementation "org.spockframework:spock-core:2.4-M1-groovy-4.0"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     androidTestImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+}
+spotless { // if you are using build.gradle.kts, instead of 'spotless {' use:
+    // configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+    kotlin {
+        // by default the target is every '.kt' and '.kts` file in the java sourcesets
+        ktfmt()    // has its own section below
+        ktlint()   // has its own section below
+        diktat()   // has its own section below
+        prettier() // has its own section below
+        licenseHeader '/* (C)$YEAR */' // or licenseHeaderFile
+    }
+    kotlinGradle {
+        target '*.gradle.kts' // default target for kotlinGradle
+        ktlint() // or ktfmt() or prettier()
+    }
 }
