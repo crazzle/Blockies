@@ -1,5 +1,3 @@
-package com.pixels.blockies.game.game
-
 import com.pixels.blockies.game.game.figures.FigureI
 import spock.lang.Specification
 
